@@ -1,0 +1,50 @@
+<project default="compile">
+
+  <!-- build.xml for GEAR-scraper
+       name: Alexander Mousavi, Kyle Jorgensen for CS56 S11-->
+  
+  <property environment="env"/>
+  <property name="webRoot" value="${env.HOME}/public_html/" />
+  <property name="webBaseUrl" value="http://www.cs.ucsb.edu/~${env.USER}" />
+  <property name="course" value="cs56" />
+
+ 
+  <path id="classpath">
+    <pathelement location = "build" />
+    <pathelement location="lib/pdfbox-1.8.4.jar"/>  
+    <pathelement location="lib/junit-4.8.2.jar"/>  
+
+  </path>
+
+  <mkdir dir="build" />
+  <target name="compile" description="compiles the code">
+    <javac srcdir="src" destdir="build" includeantruntime="false" debuglevel="lines,source">
+      <classpath refid="classpath" /> 
+    </javac>
+  </target>
+
+  
+  <target name="clean" description="delete unnecessary files and directories">
+    <delete dir="build" quiet="true" />
+  </target>
+ 
+
+<!-- ************* JUNIT TEST ************** -->
+
+<target name="test" depends="compile" description="junit testing for reading the PDF files">
+  
+  <junit haltonerror="no" haltonfailure="no">
+    <classpath refid="classpath" />  
+      <batchtest fork="yes">
+	     <fileset dir="src">
+	     <!-- this will pick up every class with a name ending in Test -->
+	       <include name="**/*Test.java"/>
+	     </fileset>
+      </batchtest>
+      <formatter type="plain" usefile="false" /> 
+    </junit>
+</target>
+
+
+</project>
+
