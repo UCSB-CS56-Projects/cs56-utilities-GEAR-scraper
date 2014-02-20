@@ -1,4 +1,4 @@
-// package edu.ucsb.cs56.projects.utilities.GEAR-scraper;
+package edu.ucsb.cs56.projects.utilities.GEAR_scraper;
 // not sure what correct package will be
 
 import org.junit.Test;
