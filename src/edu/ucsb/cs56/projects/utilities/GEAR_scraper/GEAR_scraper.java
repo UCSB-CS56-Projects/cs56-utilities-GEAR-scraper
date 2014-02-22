@@ -60,9 +60,29 @@ public class GEAR_scraper  {
      */
     public GEAR_scraper(String url,int startPage,int endPage){
 	try{
-	is = new URL(url).openStream();
+	is = new URL(defaultURL).openStream();
+	is2 = new URL(defaultURL).openStream();
+	is3 = new URL(defaultURL).openStream();
+	is4 = new URL(defaultURL).openStream();
+
 	PDFTextParser myTester = new PDFTextParser();
-	textToParse = myTester.pdftoText(is,startPage,endPage);
+	PDFTextParser myTester2 = new PDFTextParser();
+	PDFTextParser myTester3 = new PDFTextParser();
+	PDFTextParser myTester4 = new PDFTextParser();
+
+	textToParse2 = "";
+	textToParse3 = "";
+	textToParse4 = "";
+
+	textToParse = myTester.pdftoText(is,startPage,startPage+1);
+	if(endPage-startPage>1)
+	    textToParse2 = myTester2.pdftoText(is2,startPage+2,startPage+3);
+	if(endPage-startPage>3)
+	    textToParse3 = myTester3.pdftoText(is3,startPage+4,startPage+5);
+	if(endPage-startPage>5)
+	    textToParse4 = myTester4.pdftoText(is4,startPage+6,startPage+7);
+
+
     }catch(IOException e){
 	e.printStackTrace();
     }
