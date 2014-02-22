@@ -26,9 +26,9 @@ import org.apache.pdfbox.pdmodel.common.PDStream;
 
 
 public class GEAR_scraper  {
-    InputStream is;
+    InputStream is,is2,is3,is4;
     String defaultURL = "http://engineering.ucsb.edu/current_undergraduates/pdf/GEAR-12-13.pdf";
-    String textToParse;
+    String textToParse, textToParse2, textToParse3,textToParse4;
     /**
      * default constructor - uses '12-'13 GEAR 
     */
@@ -36,8 +36,22 @@ public class GEAR_scraper  {
   public GEAR_scraper(){
 	try{
 	is = new URL(defaultURL).openStream();
+	is2 = new URL(defaultURL).openStream();
+	is3 = new URL(defaultURL).openStream();
+	is4 = new URL(defaultURL).openStream();
+
 	PDFTextParser myTester = new PDFTextParser();
-	textToParse = myTester.pdftoText(is,10,17);
+	PDFTextParser myTester2 = new PDFTextParser();
+	PDFTextParser myTester3 = new PDFTextParser();
+	PDFTextParser myTester4 = new PDFTextParser();
+
+	textToParse = myTester.pdftoText(is,12,13);
+	textToParse2 = myTester2.pdftoText(is2,14,15);
+	textToParse3 = myTester3.pdftoText(is3,16,17);
+	textToParse4 = myTester4.pdftoText(is4,18,19);
+
+
+
     }catch(IOException e){
 	e.printStackTrace();}
    }
@@ -70,6 +84,49 @@ public class GEAR_scraper  {
 	    if( s.contains("0") || s.contains("1") || s.contains("2") || s.contains("3") || s.contains("4") || s.contains("5") || s.contains("6") || s.contains("7") || s.contains("8") || s.contains("9"))
 	    x.add(new GECourse(s,area));
 	}
+
+	for(String s: textToParse2.split("\n")){
+	    if(s.contains("Area E")){
+		area = "E";
+		break;}
+	    if(s.contains("Area F")||s.contains("Area f")){
+		area = "F";
+		break;}
+	    if(s.contains("Area G")){
+		area = "G";
+		break;}
+	    if( s.contains("0") || s.contains("1") || s.contains("2") || s.contains("3") || s.contains("4") || s.contains("5") || s.contains("6") || s.contains("7") || s.contains("8") || s.contains("9"))
+	    x.add(new GECourse(s,area));
+	}
+
+	for(String s: textToParse3.split("\n")){
+	    if(s.contains("Area E")){
+		area = "E";
+		break;}
+	    if(s.contains("Area F")||s.contains("Area f")){
+		area = "F";
+		break;}
+	    if(s.contains("Area G")){
+		area = "G";
+		break;}
+	    if( s.contains("0") || s.contains("1") || s.contains("2") || s.contains("3") || s.contains("4") || s.contains("5") || s.contains("6") || s.contains("7") || s.contains("8") || s.contains("9"))
+	    x.add(new GECourse(s,area));
+	}
+
+	for(String s: textToParse4.split("\n")){
+	    if(s.contains("Area E")){
+		area = "E";
+		break;}
+	    if(s.contains("Area F")||s.contains("Area f")){
+		area = "F";
+		break;}
+	    if(s.contains("Area G")){
+		area = "G";
+		break;}
+	    if( s.contains("0") || s.contains("1") || s.contains("2") || s.contains("3") || s.contains("4") || s.contains("5") || s.contains("6") || s.contains("7") || s.contains("8") || s.contains("9"))
+	    x.add(new GECourse(s,area));
+	}
+
 	return x;
     }
 

@@ -43,7 +43,7 @@ public class GECourse implements CoEgeCourse{
 		    courseNum = s;
 		    p = 1;
 		}
-		else if(p==0)
+		else if(p==0 & !(s.contains("*")) & !(s.contains("&")) & !(s.contains("@")) & !(s.contains("^")) )
 		    deptInGear+=(" "+s);		    
 
 	    }
