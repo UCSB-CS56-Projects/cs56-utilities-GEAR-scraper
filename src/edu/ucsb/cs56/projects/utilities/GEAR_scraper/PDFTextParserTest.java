@@ -2,7 +2,10 @@ package edu.ucsb.cs56.projects.utilities.GEAR_scraper;
 // not sure what correct package will be
 
 import org.junit.Test;
+import java.awt.Rectangle;
+import java.net.URL;
 import static org.junit.Assert.assertEquals;
+import java.io.*;
 
 /**
  * The test class PDFTextParserTest -- it tests the PDFTextParser class
@@ -48,7 +51,6 @@ public class PDFTextParserTest
 	assertEquals(expected,myTester.pdftoText("pdfs/symbols.pdf"));
     }
 
-    
 
 
 }

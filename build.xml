@@ -29,6 +29,13 @@
   </target>
  
 
+  <target name="run" depends="compile">
+    <java
+classpathref="classpath"
+classname="edu.ucsb.cs56.projects.utilities.GEAR_scraper.GEAR_scraper_Interface" />
+  </target>
+
+
 <!-- ************* JUNIT TEST ************** -->
 
 <target name="test" depends="compile" description="junit testing for reading the PDF files">

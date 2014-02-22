@@ -1,5 +1,4 @@
 package edu.ucsb.cs56.projects.utilities.GEAR_scraper;
-// Not sure what correct package will be
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -20,9 +19,9 @@ import org.apache.pdfbox.pdmodel.common.PDStream;
  * PDFTextParser  -- processes the PDFs into text with apache pdf box
  *
  * class PDFTextParser adapted from http://thottingal.in/blog/2009/06/24/pdfbox-extract-text-from-pdf/ 
- *
+ * 
  * @author Alex Mousavi and Kyle Jorgensen
- * @version CS56, Spring 2011
+ * @version CS56, Winter 2014
  * @see PDFTextParserTest
  */
 
@@ -89,16 +88,17 @@ public class PDFTextParser {
      * @param rect  specifies the bounded area that you want to parse from
      * @param n  the page number that you want to extract from
      */
-    public static String pdftoText(InputStream is, Rectangle rect, int n) {
+    public static String pdftoText(InputStream is, int startPage, int endPage) {
 	PDFParser parser;
 	String parsedText = null;
-	PDFTextStripperByArea pdfStripper = null;
+	PDFTextStripper pdfStripper;
 	PDDocument pdDoc = null;
 	COSDocument cosDoc = null;
 
 	// try to create a new PDFParser
 	try {
 	    parser = new PDFParser(is);
+	    pdfStripper = new PDFTextStripper();
 	} catch (IOException e) {
 	    System.err.println("Unable to open PDF Parser. " + e.getMessage());
 	    return null;
@@ -107,17 +107,10 @@ public class PDFTextParser {
 	try {
 	    parser.parse();
 	    cosDoc = parser.getDocument();
-	    pdfStripper = new PDFTextStripperByArea();
-	    pdDoc = new PDDocument(cosDoc);
-
-	    List allPages = pdDoc.getDocumentCatalog().getAllPages(); // List holds a collection of PDPages
-	    	    
-	    PDPage firstPage = (PDPage)allPages.get(n); // get the page number we want..?
-	    
-	    pdfStripper.addRegion("class1",rect);  // determines region by using a Rectangle object
-	    pdfStripper.extractRegions(firstPage);  // extract the text from the region of the page we want
-	    parsedText = pdfStripper.getTextForRegion("class1"); 
-	    //System.out.println("stripper by area is working");
+	    pdfStripper.setStartPage(startPage);
+	    pdfStripper.setEndPage(endPage);
+	    parsedText = pdfStripper.getText(new PDDocument(cosDoc));
+		    
 	} catch (Exception e) {
 	    System.err
 		.println("An exception occured in parsing the PDF Document."
