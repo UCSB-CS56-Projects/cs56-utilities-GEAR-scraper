@@ -53,8 +53,46 @@ public class GEAR_scraper_Interface{
     } // end go
 
     public void show(String line){
-	//stub
+	if(line.contains("all")){
+		for(GECourse a: p)
+		    System.out.println(a);
+	    }
+	else if(line.contains("areaD")){
+	    for(GECourse a: p){
+		if(a.isD())
+		    System.out.println(a);}}
+	else if(line.contains("areaE")){
+	    for(GECourse a: p){
+		if(a.isE())
+		    System.out.println(a);}}	
+	else if(line.contains("areaF")){
+	    for(GECourse a: p){
+		if(a.isF())
+		    System.out.println(a);}}
+	else if(line.contains("areaG")){
+	    for(GECourse a: p){
+		if(a.isG())
+		    System.out.println(a);}}
+	else if(line.contains("writing")){
+	    for(GECourse a: p){
+		if(a.isWriting())
+		    System.out.println(a);}}
+	else if(line.contains("american")){
+	    for(GECourse a: p){
+		if(a.isAmHistInst())
+		    System.out.println(a);}}
+	else if(line.contains("ethnicity")){
+	    for(GECourse a: p){
+		if(a.isEthnicity())
+		    System.out.println(a);}}
+	else if(line.contains("euro")){
+	    for(GECourse a: p){
+		if(a.isEuroTrad())
+		    System.out.println(a);}}
+	else{
+	    System.out.println(line+" not recognized. possible show commands include: \"show all\"  \"show areaD\"  \"show areaE\"  \"show areaF\"  \"show areaG\"  \"show writing\"  \"show american\"  \"show ethnicity\"  \"show euro\" ");
 
+	}
     }
 
     public void help(String line){

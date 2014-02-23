@@ -85,10 +85,10 @@ public class PDFTextParser {
     /** Extract text BY AREA from PDF Document via an InputStream (such as a URL), and a Rectangle object to 
      *      determine the area from which to extract the text.
      * @param is  an InputStream from which to read (likely a URL)
-     * @param rect  specifies the bounded area that you want to parse from
-     * @param n  the page number that you want to extract from
+     * @param startPage specifies the page you want to start on (note, this goes by the pageNumber of the pdf itself, not the text you are reading)for example, for the 2012/2013 catalog, the course list appears to start on page 10, but actually starts on 12.
+     * @param endPage specifies the page you want the parser to stop on
      */
-    public static String pdftoText(InputStream is, int startPage, int endPage) {
+    public static String pdftoText(InputStream is, int page) {
 	PDFParser parser;
 	String parsedText = null;
 	PDFTextStripper pdfStripper;
@@ -107,8 +107,8 @@ public class PDFTextParser {
 	try {
 	    parser.parse();
 	    cosDoc = parser.getDocument();
-	    pdfStripper.setStartPage(startPage);
-	    pdfStripper.setEndPage(endPage);
+	    pdfStripper.setStartPage(page);
+	    pdfStripper.setEndPage(page);
 	    parsedText = pdfStripper.getText(new PDDocument(cosDoc));
 		    
 	} catch (Exception e) {

@@ -28,59 +28,33 @@ import org.apache.pdfbox.pdmodel.common.PDStream;
 public class GEAR_scraper  {
     InputStream is,is2,is3,is4;
     String defaultURL = "http://engineering.ucsb.edu/current_undergraduates/pdf/GEAR-12-13.pdf";
-    String textToParse, textToParse2, textToParse3,textToParse4;
+    ArrayList<String> textToParse = new ArrayList<String>();
     /**
      * default constructor - uses '12-'13 GEAR 
     */
 
   public GEAR_scraper(){
 	try{
-	is = new URL(defaultURL).openStream();
-	is2 = new URL(defaultURL).openStream();
-	is3 = new URL(defaultURL).openStream();
-	is4 = new URL(defaultURL).openStream();
-
-	PDFTextParser myTester = new PDFTextParser();
-	PDFTextParser myTester2 = new PDFTextParser();
-	PDFTextParser myTester3 = new PDFTextParser();
-	PDFTextParser myTester4 = new PDFTextParser();
-
-	textToParse = myTester.pdftoText(is,12,13);
-	textToParse2 = myTester2.pdftoText(is2,14,15);
-	textToParse3 = myTester3.pdftoText(is3,16,17);
-	textToParse4 = myTester4.pdftoText(is4,18,19);
-
-
-
-    }catch(IOException e){
-	e.printStackTrace();}
-   }
+	    int startPage = 12;
+	    for(int i = 0;i<8;i++){
+		is = new URL(defaultURL).openStream();
+		PDFTextParser myTester = new PDFTextParser();
+		String x = myTester.pdftoText(is,startPage+i);
+		textToParse.add(x);}
+	}catch(IOException e){
+	    e.printStackTrace();}
+  }
     /**
      * constructor takes custom url, startPage, and endPage 
      */
     public GEAR_scraper(String url,int startPage,int endPage){
 	try{
-	is = new URL(defaultURL).openStream();
-	is2 = new URL(defaultURL).openStream();
-	is3 = new URL(defaultURL).openStream();
-	is4 = new URL(defaultURL).openStream();
-
-	PDFTextParser myTester = new PDFTextParser();
-	PDFTextParser myTester2 = new PDFTextParser();
-	PDFTextParser myTester3 = new PDFTextParser();
-	PDFTextParser myTester4 = new PDFTextParser();
-
-	textToParse2 = "";
-	textToParse3 = "";
-	textToParse4 = "";
-
-	textToParse = myTester.pdftoText(is,startPage,startPage+1);
-	if(endPage-startPage>1)
-	    textToParse2 = myTester2.pdftoText(is2,startPage+2,startPage+3);
-	if(endPage-startPage>3)
-	    textToParse3 = myTester3.pdftoText(is3,startPage+4,startPage+5);
-	if(endPage-startPage>5)
-	    textToParse4 = myTester4.pdftoText(is4,startPage+6,startPage+7);
+	    
+	    for(int i = 0;i<(endPage+1-startPage);i++){
+		is = new URL(defaultURL).openStream();
+		PDFTextParser myTester = new PDFTextParser();
+		String x = myTester.pdftoText(is,startPage+i);
+		textToParse.add(x);}
 
 
     }catch(IOException e){
@@ -88,64 +62,36 @@ public class GEAR_scraper  {
     }
     }
 
+    private boolean isCourse(String s){
+	if (( s.contains("0") || s.contains("1") || s.contains("2") || s.contains("3") || s.contains("4") || s.contains("5") || s.contains("6") || s.contains("7") || s.contains("8") || s.contains("9")) && ( s.contains("Anthropology")) || s.contains("Art") || s.contains("Science") || s.contains("Exercise") || s.contains("Astronomy") || s.contains("Biology") || s.contains("Biomolecular") || s.contains("Black Studies") || s.contains("Chemical") || s.contains("Engineering") || s.contains("French") || s.contains("Studies") || s.contains("Chinese") || s.contains("Classic") || s.contains("Communication") || s.contains("Literature") || s.contains("Counseling") || s.contains("Dance") || s.contains("Dynamical")  || s.contains("Ecology")|| s.contains("Economics") || s.contains("Education") || s.contains("German") || s.contains("English") || s.contains("Geography") || s.contains("Global") || s.contains("Greek") || s.contains("Hebrew") || s.contains("History") || s.contains("Interdisciplinary") || s.contains("Italian") || s.contains("Japanese") || s.contains("Latin") || s.contains("Linguistics") || s.contains("Literature") || s.contains("Materials") || s.contains("Math") || s.contains("Molecular") || s.contains("Music") || s.contains("Philosophy") || s.contains("Physics") || s.contains("Portuguese") || s.contains("Psychology") || s.contains("Slavic") || s.contains("Sociology") || s.contains("Spanish") || s.contains("Statistics") || s.contains("Technology") || s.contains("Theater") || s.contains("Writing") )
+	    return true;
+	return false;
+
+	    }
+
     public ArrayList<GECourse> createArrayList() {
 	String area = "D";
 	ArrayList<GECourse> x = new ArrayList<GECourse>();
-	for(String s: textToParse.split("\n")){
-	    if(s.contains("Area E")){
-		area = "E";
-		break;}
-	    if(s.contains("Area F")||s.contains("Area f")){
-		area = "F";
-		break;}
-	    if(s.contains("Area G")){
-		area = "G";
-		break;}
-	    if( s.contains("0") || s.contains("1") || s.contains("2") || s.contains("3") || s.contains("4") || s.contains("5") || s.contains("6") || s.contains("7") || s.contains("8") || s.contains("9"))
-	    x.add(new GECourse(s,area));
+	for(String page: textToParse){
+
+	    for(String s: page.split("\n")){
+		if(s.contains("provide a perspective on world cultures")){
+		    area = "E";
+		    break;}
+		if(s.contains("Area F") || s.contains("Area f")){
+		    area = "F";
+		    break;}
+		if(s.contains("develop an appreciation of literature")){
+		    area = "G";
+		    break;}
+		if(s.contains("Special Subject Area")){
+		    area = "S";
+		    break;}
+		if(isCourse(s))
+		    x.add(new GECourse(s,area));
+	}
 	}
 
-	for(String s: textToParse2.split("\n")){
-	    if(s.contains("Area E")){
-		area = "E";
-		break;}
-	    if(s.contains("Area F")||s.contains("Area f")){
-		area = "F";
-		break;}
-	    if(s.contains("Area G")){
-		area = "G";
-		break;}
-	    if( s.contains("0") || s.contains("1") || s.contains("2") || s.contains("3") || s.contains("4") || s.contains("5") || s.contains("6") || s.contains("7") || s.contains("8") || s.contains("9"))
-	    x.add(new GECourse(s,area));
-	}
-
-	for(String s: textToParse3.split("\n")){
-	    if(s.contains("Area E")){
-		area = "E";
-		break;}
-	    if(s.contains("Area F")||s.contains("Area f")){
-		area = "F";
-		break;}
-	    if(s.contains("Area G")){
-		area = "G";
-		break;}
-	    if( s.contains("0") || s.contains("1") || s.contains("2") || s.contains("3") || s.contains("4") || s.contains("5") || s.contains("6") || s.contains("7") || s.contains("8") || s.contains("9"))
-	    x.add(new GECourse(s,area));
-	}
-
-	for(String s: textToParse4.split("\n")){
-	    if(s.contains("Area E")){
-		area = "E";
-		break;}
-	    if(s.contains("Area F")||s.contains("Area f")){
-		area = "F";
-		break;}
-	    if(s.contains("Area G")){
-		area = "G";
-		break;}
-	    if( s.contains("0") || s.contains("1") || s.contains("2") || s.contains("3") || s.contains("4") || s.contains("5") || s.contains("6") || s.contains("7") || s.contains("8") || s.contains("9"))
-	    x.add(new GECourse(s,area));
-	}
 
 	return x;
     }
