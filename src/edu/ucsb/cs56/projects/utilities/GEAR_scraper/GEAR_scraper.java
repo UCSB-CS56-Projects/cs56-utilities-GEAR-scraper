@@ -48,11 +48,11 @@ public class GEAR_scraper  {
     /**
      * constructor takes custom url, startPage, and endPage 
      */
-    public GEAR_scraper(String url,int startPage,int endPage){
+    public GEAR_scraper(URL url,int startPage,int endPage){
 	try{
 	    
 	    for(int i = 0;i<(endPage+1-startPage);i++){
-		BufferedInputStream is = new BufferedInputStream(new URL(defaultURL).openStream());
+		BufferedInputStream is = new BufferedInputStream(url.openStream());
 		PDFTextParser myTester = new PDFTextParser();
 		String x = myTester.pdftoText(is,startPage+i);
 		textToParse.add(x);}
@@ -76,19 +76,18 @@ public class GEAR_scraper  {
 	for(String page: textToParse){
 
 	    for(String s: page.split("\n")){
-		if(s.contains("perspective on world cultures") || s.contains("Area E")){
+		if(s.contains("perspective on world cultures") || s.contains("Area E"))
 		    area = "E";
-		    break;}
-		if(s.contains("Area F") || s.contains("Area f")){
+		    
+		else if(s.contains("Area F") || s.contains("Area f"))
 		    area = "F";
-		    break;}
-		if(s.contains("develop an appreciation of literature")){
+		else if(s.contains("develop an appreciation of literature"))
 		    area = "G";
-		    break;}
-		if(s.contains("Special Subject Area")){
+		else if(s.contains("Special Subject Area"))
 		    area = "S";
-		    break;}
-		if(isCourse(s))
+		else if(s.contains("Area H"))
+		    area = "H";
+		else if(isCourse(s))
 		    x.add(new GECourse(s,area));
 	}
 	}

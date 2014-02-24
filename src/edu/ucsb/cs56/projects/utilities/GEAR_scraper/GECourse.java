@@ -14,12 +14,16 @@ public class GECourse implements CoEgeCourse{
     private boolean isE;
     private boolean isF;
     private boolean isG;
+    private boolean isH;
+    private boolean isS;
     private boolean isWriting;
     private boolean isAmHistInst;
     private boolean isEuroTrad;
     private boolean isEthnicity;
 
     public GECourse(String line,String area){
+	if(line.contains("This course applies"))
+	    return;
 	if (area.equals("D"))
 	    isD = true;
 	if (area.equals("E"))
@@ -28,6 +32,10 @@ public class GECourse implements CoEgeCourse{
 	    isF = true;
 	if (area.equals("G"))
 	    isG = true;
+	if (area.equals("H"))
+	    isH = true;
+	if (area.equals("S"))
+	    isS = true;
 	if (line.contains("*"))
 	    isWriting = true;
 	if (line.contains("@"))
@@ -63,6 +71,8 @@ public class GECourse implements CoEgeCourse{
     public boolean isE(){return isE;} // its on the area E list
     public boolean isF(){return isF;} // its on the area F list
     public boolean isG(){return isG;} // its on the area G list
+    public boolean isH(){return isH;} // its on the area F list
+    public boolean isS(){return isS;} // its on the area G list
     public boolean isWriting(){return isWriting;} // This course applies toward the writing requirement. 
     public boolean isAmHistInst(){return isAmHistInst;} // This course applies toward the American History & Institutions requirement.
     public boolean isEthnicity(){return isEthnicity;} //  This course applies toward the ethnicity requirement.
@@ -79,7 +89,7 @@ public class GECourse implements CoEgeCourse{
 	    deptCode = "ARTHI";
 	else if(line.contains("Art Studio"))
 	    deptCode = "ARTST";
-	else if(line.contains("Asian American"))
+	else if(line.contains("Asian American Studies"))
 	    deptCode =  "AS AM";
 	else if(line.contains("Astronomy"))
 	    deptCode =  "ASTRO";
@@ -91,7 +101,7 @@ public class GECourse implements CoEgeCourse{
 	    deptCode =  "BL ST";
 	else if(line.contains("Chemical Engineering"))
 	    deptCode =  "CH E";
-	else if(line.contains("Chicano"))
+	else if(line.contains("Chicano Studies"))
 	    deptCode =  "CH ST";
 	else if(line.contains("Chinese"))
 	    deptCode =  "CHIN";
@@ -163,7 +173,7 @@ public class GECourse implements CoEgeCourse{
 	    deptCode =  "JAPAN";
 	else if(line.contains("Korean"))
 	    deptCode =  "KOR";
-	else if(line.contains("Latin")&&!(line.contains("Latin American")))
+	else if(line.contains("Latin")&&!(line.contains("Latin American"))&&!line.contains("Sociology"))
 	    deptCode =  "LATIN";
 	else if(line.contains("Latin American and Iberian"))
 	    deptCode =  "LAIS";

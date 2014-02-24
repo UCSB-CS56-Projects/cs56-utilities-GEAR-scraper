@@ -7,6 +7,7 @@ import java.net.URL;
 import static org.junit.Assert.assertEquals;
 import java.io.*;
 
+
 /**
  * The test class PDFTextParserTest -- it tests the PDFTextParser class
  *
@@ -51,6 +52,15 @@ public class PDFTextParserTest
 	assertEquals(expected,myTester.pdftoText("pdfs/symbols.pdf"));
     }
 
+    @Test public void testStream()
+    {
+	try{
+	PDFTextParser myTester = new PDFTextParser();
+	System.out.println(myTester.pdftoText(new BufferedInputStream(new URL("http://engineering.ucsb.edu/current_undergraduates/pdf/GEAR-12-13.pdf").openStream()), 14));}
+	catch(Exception e){
+	    e.printStackTrace();}
+	assertEquals("lol","lol");
+    }
 
 
 }

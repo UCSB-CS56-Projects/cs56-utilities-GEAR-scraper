@@ -30,7 +30,7 @@
  
 
   <target name="run" depends="compile">
-    <java fork = "true"
+    <java fork = "true" 
 classpathref="classpath"
 classname="edu.ucsb.cs56.projects.utilities.GEAR_scraper.GEAR_scraper_Interface" />
   </target>

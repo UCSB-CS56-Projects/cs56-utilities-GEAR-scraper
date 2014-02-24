@@ -18,13 +18,19 @@ public class GEAR_scraper_Interface{
     private GEAR_scraper x;
     private Scanner sc = new Scanner(System.in);
     private ArrayList<GECourse> p;
-
+    private String[] commands = {"help","quit","show all","customURL","show areaD","show areaE", "show areaF", "show areaG", "show areaH", "show specialArea", "show ethnicity", "show american", "show euro", "show writing"};
 
     public void go(String... args) {
 	if(args.length==0)
 	    x = new GEAR_scraper();
-	else
-	    x = new GEAR_scraper(args[0],Integer.parseInt(args[1]),Integer.parseInt(args[2]));
+	else{
+	    try{
+		x = new GEAR_scraper(new URL(args[0]),Integer.parseInt(args[1]),Integer.parseInt(args[2]));}
+	    catch(Exception e){
+		System.out.println("error following url");
+		return;}
+
+	}
 	p = x.createArrayList();
 
 	boolean done = false;
@@ -44,6 +50,8 @@ public class GEAR_scraper_Interface{
 		this.help(line);
 	    } else if (line.equals("")) {
 		System.out.println("Type \"quit\" to quit");
+	    } else if(line.contains("customURL")){
+		customURL();
 	    } else {
 		System.out.println("Unknown command: " + line);
 		System.out.println("Try \"help\" or type \"quit\" to quit");
@@ -51,6 +59,23 @@ public class GEAR_scraper_Interface{
 	} // end while
 
     } // end go
+
+    public void customURL(){
+	System.out.print("Please type in the URL \n" +prompt);
+	String line = sc.nextLine().trim();
+	System.out.println("Type in the Start Page");
+	String start = sc.nextLine().trim();
+	System.out.println("Type in the End Page");
+	String end = sc.nextLine().trim();
+	try{
+	    x = new GEAR_scraper(new URL(line),Integer.parseInt(start),Integer.parseInt(end));
+	    p = x.createArrayList();
+	}catch(Exception e){
+	    System.out.println("URL: " + line + "\n Start Page: " +start +" End Page: " + end);
+	    System.out.println("Gear Scraping failed. Please check the URL and Page numbers and try again");
+	    customURL();
+	}
+    }
 
     public void show(String line){
 	if(line.contains("all")){
@@ -73,6 +98,14 @@ public class GEAR_scraper_Interface{
 	    for(GECourse a: p){
 		if(a.isG())
 		    System.out.println(a);}}
+	else if(line.contains("areaH")){
+	    for(GECourse a: p){
+		if(a.isH())
+		    System.out.println(a);}}
+	else if(line.contains("specialArea")){
+	    for(GECourse a: p){
+		if(a.isS())
+		    System.out.println(a);}}
 	else if(line.contains("writing")){
 	    for(GECourse a: p){
 		if(a.isWriting())
@@ -90,14 +123,18 @@ public class GEAR_scraper_Interface{
 		if(a.isEuroTrad())
 		    System.out.println(a);}}
 	else{
-	    System.out.println(line+" not recognized. possible show commands include: \"show all\"  \"show areaD\"  \"show areaE\"  \"show areaF\"  \"show areaG\"  \"show writing\"  \"show american\"  \"show ethnicity\"  \"show euro\" ");
-
+	    System.out.println(line+" not recognized. possible show commands include: \n ");
+	    for(String cmd: commands){
+		if(cmd.contains("show"))
+		   System.out.println(cmd);
+	    }
 	}
     }
 
     public void help(String line){
-	//stub
-
+	System.out.println("Possible Commands:");
+	for(String cmd: commands)
+	    System.out.println(cmd);
     }
 
     public static void main(String... args){

@@ -37,7 +37,6 @@ public class PDFTextParser {
 	String parsedText = null;  // this is the String that will contain the text from the pdf doc
 
 	// these 3 are all objects within PDF box that allow us to manipulate the pdf document
-	PDFTextStripper pdfStripper = null;
 	PDDocument pdDoc = null;
 	COSDocument cosDoc = null;
 
@@ -56,6 +55,8 @@ public class PDFTextParser {
 	}
 	// try to parse the PDF document
 	try {
+	    PDFTextStripper pdfStripper = null;
+
 	    parser.parse();
 	    cosDoc = parser.getDocument();
 
@@ -91,13 +92,13 @@ public class PDFTextParser {
     public static String pdftoText(BufferedInputStream is, int page) {
 	PDFParser parser;
 	String parsedText = null;
-	PDFTextStripper pdfStripper;
+	PDFTextStripperByArea pdfStripper;
 	PDDocument pdDoc = null;
-
+	Rectangle rect,rect2;
 	// try to create a new PDFParser
 	try {
 	    parser = new PDFParser(is);
-	    pdfStripper = new PDFTextStripper();
+	    pdfStripper = new PDFTextStripperByArea();
 	} catch (IOException e) {
 	    System.err.println("Unable to open PDF Parser. " + e.getMessage());
 	    return null;
@@ -106,10 +107,18 @@ public class PDFTextParser {
 	try {
 	    parser.parse();
 	    pdDoc = parser.getPDDocument();
-	    pdfStripper.setStartPage(page);
-	    pdfStripper.setEndPage(page);
-	    parsedText = pdfStripper.getText(pdDoc);
-		    
+	    pdfStripper.setSortByPosition(true);
+	    rect = new Rectangle(0,0,300,800);
+	    rect2 = new Rectangle(300,0,1000,800);
+	    List allPages = pdDoc.getDocumentCatalog().getAllPages(); // List holds a collection of PDPages
+
+	    PDPage firstPage = (PDPage)allPages.get(page-1);
+
+	    pdfStripper.addRegion("class1",rect); // determines region by using a Rectangle object
+	    pdfStripper.addRegion("class2",rect2);
+	    pdfStripper.extractRegions(firstPage); // extract the text from the region of the page we want
+	    parsedText = pdfStripper.getTextForRegion("class1")+pdfStripper.getTextForRegion("class2");
+	    
 	} catch (Exception e) {
 	    System.err
 		.println("An exception occured in parsing the PDF Document."
