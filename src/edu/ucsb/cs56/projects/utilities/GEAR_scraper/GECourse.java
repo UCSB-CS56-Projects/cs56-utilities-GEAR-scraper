@@ -1,9 +1,11 @@
 package edu.ucsb.cs56.projects.utilities.GEAR_scraper;
 
 /**
- * CoEGECourse Interface
+ * Implements CoEGECourse Interface
+ * Holds information for a GE Course.
+ * @see CoEGECourse
  * @version CS56, Winter 2014
- * 
+ * @author Alan Buzdar
  */
 
 public class GECourse implements CoEgeCourse{
@@ -21,6 +23,11 @@ public class GECourse implements CoEgeCourse{
     private boolean isEuroTrad;
     private boolean isEthnicity;
 
+    /** GECourse Constructor
+     *@param line the line of text that you want to create into a GECourse object
+     *@param area what area requirement this GE fills
+     *
+     */
     public GECourse(String line,String area){
 	if(line.contains("This course applies"))
 	    return;
@@ -46,6 +53,8 @@ public class GECourse implements CoEgeCourse{
 	    isEuroTrad = true;
 	int p = 0;
 	deptInGear = "";
+	// read the text up to the first set of numbers.
+	// this will be the deptInGear. The first set of numbers is taken as the courseNum
 	for(String s: line.split("\\s+")){
 		if(( s.contains("0") || s.contains("1") || s.contains("2") || s.contains("3") || s.contains("4") || s.contains("5") || s.contains("6") || s.contains("7") || s.contains("8") || s.contains("9"))&& (p==0)){
 		    courseNum = s;
@@ -55,7 +64,7 @@ public class GECourse implements CoEgeCourse{
 		    deptInGear+=(" "+s);		    
 
 	    }
-	setDeptCode(line);
+	setDeptCode(deptInGear);
 
 
     }
@@ -79,6 +88,9 @@ public class GECourse implements CoEgeCourse{
     public boolean isEuroTrad(){return isEuroTrad;} // This course applies toward the European Traditions requirement.
 
     //helper function to set deptCode
+    /** sets the dept code for the class based on the string inputted
+     *
+     */
     private void setDeptCode(String line){
 
 	if(line.contains("Anthropology"))

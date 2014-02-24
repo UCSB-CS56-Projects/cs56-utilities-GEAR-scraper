@@ -26,14 +26,15 @@ import org.apache.pdfbox.pdmodel.common.PDStream;
 
 
 public class GEAR_scraper  {
-     BufferedInputStream is;
+    BufferedInputStream is;
     String defaultURL = "http://engineering.ucsb.edu/current_undergraduates/pdf/GEAR-12-13.pdf";
     ArrayList<String> textToParse = new ArrayList<String>();
     /**
-     * default constructor - uses '12-'13 GEAR 
+     * default constructor - uses '12-'13 GEAR, pages 12 through 19 
     */
 
   public GEAR_scraper(){
+      //parse one page at a time
 	try{
 	    int startPage = 12;
 	    for(int i = 0;i<8;i++){
@@ -46,7 +47,10 @@ public class GEAR_scraper  {
 	    e.printStackTrace();}
   }
     /**
-     * constructor takes custom url, startPage, and endPage 
+     * Constructor - uses PDFParser to create Gear_scraper object.
+     * @param url - a URL object for the gear pdf you'd like to scrape
+     * @param startPage - the page the GE catalog starts at, note: GEAR has its own page numbers physically printed on the pages. these are the wrong ones, you want the page # of the pdf document, not the catalog.
+     * @see PDFParser
      */
     public GEAR_scraper(URL url,int startPage,int endPage){
 	try{
@@ -62,23 +66,31 @@ public class GEAR_scraper  {
 	e.printStackTrace();
     }
     }
-
+    /** just a helper function that checks if the line of text is a course 
+     *@param s the line of text you want to check
+     *@return true if it is a course, false if it isn't
+     */
     private boolean isCourse(String s){
 	if (( s.contains("0") || s.contains("1") || s.contains("2") || s.contains("3") || s.contains("4") || s.contains("5") || s.contains("6") || s.contains("7") || s.contains("8") || s.contains("9")) && ( s.contains("Anthropology")) || s.contains("Art") || s.contains("Science") || s.contains("Exercise") || s.contains("Astronomy") || s.contains("Biology") || s.contains("Biomolecular") || s.contains("Black Studies") || s.contains("Chemical") || s.contains("Engineering") || s.contains("French") || s.contains("Studies") || s.contains("Chinese") || s.contains("Classic") || s.contains("Communication") || s.contains("Literature") || s.contains("Counseling") || s.contains("Dance") || s.contains("Dynamical")  || s.contains("Ecology")|| s.contains("Economics") || s.contains("Education") || s.contains("German") || s.contains("English") || s.contains("Geography") || s.contains("Global") || s.contains("Greek") || s.contains("Hebrew") || s.contains("History") || s.contains("Interdisciplinary") || s.contains("Italian") || s.contains("Japanese") || s.contains("Latin") || s.contains("Linguistics") || s.contains("Literature") || s.contains("Materials") || s.contains("Math") || s.contains("Molecular") || s.contains("Music") || s.contains("Philosophy") || s.contains("Physics") || s.contains("Portuguese") || s.contains("Psychology") || s.contains("Slavic") || s.contains("Sociology") || s.contains("Spanish") || s.contains("Statistics") || s.contains("Technology") || s.contains("Theater") || s.contains("Writing") )
 	    return true;
 	return false;
 
 	    }
-
+   
+    /** Creates and arraylist of the course objects and returns it.
+     * @return an ArrayList of GECourse objects from the text parsed in the constructor.  
+     * @see GECourse
+     */
     public ArrayList<GECourse> createArrayList() {
-	String area = "D";
+	String area = "junk";
 	ArrayList<GECourse> x = new ArrayList<GECourse>();
 	for(String page: textToParse){
-
+	    //line by line
 	    for(String s: page.split("\n")){
-		if(s.contains("perspective on world cultures") || s.contains("Area E"))
+		if(s.contains("Area D"))
+		    area = "D";
+		else if(s.contains("perspective on world cultures") || s.contains("Area E"))
 		    area = "E";
-		    
 		else if(s.contains("Area F") || s.contains("Area f"))
 		    area = "F";
 		else if(s.contains("develop an appreciation of literature"))
@@ -87,7 +99,7 @@ public class GEAR_scraper  {
 		    area = "S";
 		else if(s.contains("Area H"))
 		    area = "H";
-		else if(isCourse(s))
+		else if(isCourse(s) && !(area.equals("junk")))
 		    x.add(new GECourse(s,area));
 	}
 	}

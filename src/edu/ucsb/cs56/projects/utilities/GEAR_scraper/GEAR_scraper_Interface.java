@@ -18,7 +18,7 @@ public class GEAR_scraper_Interface{
     private GEAR_scraper x;
     private Scanner sc = new Scanner(System.in);
     private ArrayList<GECourse> p;
-    private String[] commands = {"help","quit","show all","customURL","show areaD","show areaE", "show areaF", "show areaG", "show areaH", "show specialArea", "show ethnicity", "show american", "show euro", "show writing"};
+    private String[] commands = {"help","quit","show all","customURL","show areaD","show areaE", "show areaF", "show areaG", "show areaH", "show specialArea", "show ethnicity", "show american", "show euro", "show writing", "You may also string together show commands for more complex queries eg: \n show ethnicity areaD \n show areaG american writing"};
 
     public void go(String... args) {
 	if(args.length==0)
@@ -78,59 +78,67 @@ public class GEAR_scraper_Interface{
     }
 
     public void show(String line){
-	if(line.contains("all")){
-		for(GECourse a: p)
-		    System.out.println(a);
-	    }
-	else if(line.contains("areaD")){
-	    for(GECourse a: p){
-		if(a.isD())
-		    System.out.println(a);}}
-	else if(line.contains("areaE")){
-	    for(GECourse a: p){
-		if(a.isE())
-		    System.out.println(a);}}	
-	else if(line.contains("areaF")){
-	    for(GECourse a: p){
-		if(a.isF())
-		    System.out.println(a);}}
-	else if(line.contains("areaG")){
-	    for(GECourse a: p){
-		if(a.isG())
-		    System.out.println(a);}}
-	else if(line.contains("areaH")){
-	    for(GECourse a: p){
-		if(a.isH())
-		    System.out.println(a);}}
-	else if(line.contains("specialArea")){
-	    for(GECourse a: p){
-		if(a.isS())
-		    System.out.println(a);}}
-	else if(line.contains("writing")){
-	    for(GECourse a: p){
-		if(a.isWriting())
-		    System.out.println(a);}}
-	else if(line.contains("american")){
-	    for(GECourse a: p){
-		if(a.isAmHistInst())
-		    System.out.println(a);}}
-	else if(line.contains("ethnicity")){
-	    for(GECourse a: p){
-		if(a.isEthnicity())
-		    System.out.println(a);}}
-	else if(line.contains("euro")){
-	    for(GECourse a: p){
-		if(a.isEuroTrad())
-		    System.out.println(a);}}
-	else{
+	//check if command formatted properly
+	if(!( line.contains("all") || line.contains("euro") || line.contains("ethnicity") || line.contains("american") || line.contains("writing") || line.contains("specialArea") || line.contains("areaH") || line.contains("areaG") || line.contains("areaF") || line.contains("areaE") || line.contains("areaD"))){
 	    System.out.println(line+" not recognized. possible show commands include: \n ");
 	    for(String cmd: commands){
 		if(cmd.contains("show"))
 		   System.out.println(cmd);
 	    }
-	}
-    }
+	    return;
+	 }
 
+	GECourse a;
+	ArrayList<GECourse> temp = new ArrayList<GECourse>(p);
+	
+	for(int i = temp.size()-1;i>=0; i--){
+	    a = temp.get(i);
+	    if (a.getCourseNum() == null){
+		temp.remove(i);
+		continue;
+	    }
+	    if(line.contains("areaD")){
+		if(!a.isD()){
+		    temp.remove(i);
+		    continue;
+		}
+	    }
+	    if(line.contains("areaE")){
+		if(!a.isE()){
+		    temp.remove(i);
+		    continue;
+		}
+	    }
+	    if(line.contains("areaF")){
+		if(!a.isF()){
+		    temp.remove(i); continue; }}
+	    if(line.contains("areaG")){
+		if(!a.isG()){
+		    temp.remove(i); continue; }}
+	    if(line.contains("areaH")){
+		if(!a.isH()){
+		    temp.remove(i); continue; }}
+	    if(line.contains("specialArea")){
+		if(!a.isS()){
+		    temp.remove(i); continue; }}
+	    if(line.contains("writing")){
+		if(!a.isWriting()){
+		    temp.remove(i); continue; }}
+	    if(line.contains("american")){
+		if(!a.isAmHistInst()){
+		    temp.remove(i); continue; }}
+	    if(line.contains("ethnicity")){
+		if(!a.isEthnicity()){
+		    temp.remove(i); continue; }}
+	    if(line.contains("euro")){
+		if(!a.isEuroTrad()){
+		    temp.remove(i); continue; }}
+	}
+	for(GECourse f: temp){
+	    System.out.println(f);}
+	
+    }
+    
     public void help(String line){
 	System.out.println("Possible Commands:");
 	for(String cmd: commands)

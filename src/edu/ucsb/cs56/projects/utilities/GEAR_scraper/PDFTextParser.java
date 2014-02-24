@@ -87,7 +87,7 @@ public class PDFTextParser {
     /** Extract text by page from PDF Document via an InputStream (such as a URL)     
      * @param is  an InputStream from which to read (likely a URL)
      * @param page specifies the page you want to start on (note, this goes by the pageNumber of the pdf itself, not the text you are reading)for example, for the 2012/2013 catalog, the course list appears to start on page 10, but actually starts on 12.
-     * 
+     * reads the left side of the page, followed by the right. 
      */
     public static String pdftoText(BufferedInputStream is, int page) {
 	PDFParser parser;
@@ -108,7 +108,9 @@ public class PDFTextParser {
 	    parser.parse();
 	    pdDoc = parser.getPDDocument();
 	    pdfStripper.setSortByPosition(true);
+	    //rect is left side of page
 	    rect = new Rectangle(0,0,300,800);
+	    //rect 2 is right side of page
 	    rect2 = new Rectangle(300,0,1000,800);
 	    List allPages = pdDoc.getDocumentCatalog().getAllPages(); // List holds a collection of PDPages
 
@@ -116,7 +118,8 @@ public class PDFTextParser {
 
 	    pdfStripper.addRegion("class1",rect); // determines region by using a Rectangle object
 	    pdfStripper.addRegion("class2",rect2);
-	    pdfStripper.extractRegions(firstPage); // extract the text from the region of the page we want
+	    pdfStripper.extractRegions(firstPage); 
+	    //add left and right side
 	    parsedText = pdfStripper.getTextForRegion("class1")+pdfStripper.getTextForRegion("class2");
 	    
 	} catch (Exception e) {
