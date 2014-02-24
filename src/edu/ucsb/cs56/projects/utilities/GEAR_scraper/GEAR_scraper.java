@@ -3,7 +3,7 @@ package edu.ucsb.cs56.projects.utilities.GEAR_scraper;
 import java.net.URL;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.InputStream;
+import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.awt.Rectangle;
 import java.util.ArrayList;
@@ -26,7 +26,7 @@ import org.apache.pdfbox.pdmodel.common.PDStream;
 
 
 public class GEAR_scraper  {
-    InputStream is,is2,is3,is4;
+    BufferedInputStream is,is2,is3,is4;
     String defaultURL = "http://engineering.ucsb.edu/current_undergraduates/pdf/GEAR-12-13.pdf";
     ArrayList<String> textToParse = new ArrayList<String>();
     /**
@@ -37,11 +37,12 @@ public class GEAR_scraper  {
 	try{
 	    int startPage = 12;
 	    for(int i = 0;i<8;i++){
-		is = new URL(defaultURL).openStream();
+		is = new BufferedInputStream( (new URL(defaultURL)).openStream());
 		PDFTextParser myTester = new PDFTextParser();
 		String x = myTester.pdftoText(is,startPage+i);
-		textToParse.add(x);}
-	}catch(IOException e){
+		textToParse.add(x);
+	    }
+	}catch(Exception e){
 	    e.printStackTrace();}
   }
     /**
@@ -51,7 +52,7 @@ public class GEAR_scraper  {
 	try{
 	    
 	    for(int i = 0;i<(endPage+1-startPage);i++){
-		is = new URL(defaultURL).openStream();
+		is = new BufferedInputStream(new URL(defaultURL).openStream());
 		PDFTextParser myTester = new PDFTextParser();
 		String x = myTester.pdftoText(is,startPage+i);
 		textToParse.add(x);}
@@ -75,7 +76,7 @@ public class GEAR_scraper  {
 	for(String page: textToParse){
 
 	    for(String s: page.split("\n")){
-		if(s.contains("provide a perspective on world cultures")){
+		if(s.contains("perspective on world cultures") || s.contains("Area E")){
 		    area = "E";
 		    break;}
 		if(s.contains("Area F") || s.contains("Area f")){

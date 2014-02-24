@@ -2,7 +2,7 @@ package edu.ucsb.cs56.projects.utilities.GEAR_scraper;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.InputStream;
+import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.awt.Rectangle;
 import java.util.List;
@@ -82,13 +82,12 @@ public class PDFTextParser {
     }  
 
 
-    /** Extract text BY AREA from PDF Document via an InputStream (such as a URL), and a Rectangle object to 
-     *      determine the area from which to extract the text.
+    /** Extract text by page from PDF Document via an InputStream (such as a URL)     
      * @param is  an InputStream from which to read (likely a URL)
-     * @param startPage specifies the page you want to start on (note, this goes by the pageNumber of the pdf itself, not the text you are reading)for example, for the 2012/2013 catalog, the course list appears to start on page 10, but actually starts on 12.
-     * @param endPage specifies the page you want the parser to stop on
+     * @param page specifies the page you want to start on (note, this goes by the pageNumber of the pdf itself, not the text you are reading)for example, for the 2012/2013 catalog, the course list appears to start on page 10, but actually starts on 12.
+     * 
      */
-    public static String pdftoText(InputStream is, int page) {
+    public static String pdftoText(BufferedInputStream is, int page) {
 	PDFParser parser;
 	String parsedText = null;
 	PDFTextStripper pdfStripper;
@@ -109,7 +108,8 @@ public class PDFTextParser {
 	    cosDoc = parser.getDocument();
 	    pdfStripper.setStartPage(page);
 	    pdfStripper.setEndPage(page);
-	    parsedText = pdfStripper.getText(new PDDocument(cosDoc));
+	    pdDoc = new PDDocument(cosDoc);
+	    parsedText = pdfStripper.getText(pdDoc);
 		    
 	} catch (Exception e) {
 	    System.err
