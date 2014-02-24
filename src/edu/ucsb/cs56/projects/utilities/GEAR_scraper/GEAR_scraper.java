@@ -26,7 +26,7 @@ import org.apache.pdfbox.pdmodel.common.PDStream;
 
 
 public class GEAR_scraper  {
-    BufferedInputStream is,is2,is3,is4;
+     BufferedInputStream is;
     String defaultURL = "http://engineering.ucsb.edu/current_undergraduates/pdf/GEAR-12-13.pdf";
     ArrayList<String> textToParse = new ArrayList<String>();
     /**
@@ -52,7 +52,7 @@ public class GEAR_scraper  {
 	try{
 	    
 	    for(int i = 0;i<(endPage+1-startPage);i++){
-		is = new BufferedInputStream(new URL(defaultURL).openStream());
+		BufferedInputStream is = new BufferedInputStream(new URL(defaultURL).openStream());
 		PDFTextParser myTester = new PDFTextParser();
 		String x = myTester.pdftoText(is,startPage+i);
 		textToParse.add(x);}

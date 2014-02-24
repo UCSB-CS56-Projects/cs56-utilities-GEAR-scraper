@@ -21,6 +21,7 @@ import org.apache.pdfbox.pdmodel.common.PDStream;
  * class PDFTextParser adapted from http://thottingal.in/blog/2009/06/24/pdfbox-extract-text-from-pdf/ 
  * 
  * @author Alex Mousavi and Kyle Jorgensen
+ * @author Alan Buzdar
  * @version CS56, Winter 2014
  * @see PDFTextParserTest
  */
@@ -92,7 +93,6 @@ public class PDFTextParser {
 	String parsedText = null;
 	PDFTextStripper pdfStripper;
 	PDDocument pdDoc = null;
-	COSDocument cosDoc = null;
 
 	// try to create a new PDFParser
 	try {
@@ -105,10 +105,9 @@ public class PDFTextParser {
 	// try to parse the PDF document
 	try {
 	    parser.parse();
-	    cosDoc = parser.getDocument();
+	    pdDoc = parser.getPDDocument();
 	    pdfStripper.setStartPage(page);
 	    pdfStripper.setEndPage(page);
-	    pdDoc = new PDDocument(cosDoc);
 	    parsedText = pdfStripper.getText(pdDoc);
 		    
 	} catch (Exception e) {
@@ -119,8 +118,6 @@ public class PDFTextParser {
 	// If the document opened, close the two objects that used it
 	finally {
 	    try {
-		if (cosDoc != null)
-		    cosDoc.close();
 		if (pdDoc != null)
 		    pdDoc.close();
 	    } catch (Exception e) {
