@@ -19,6 +19,7 @@
   <mkdir dir="build" />
   <target name="compile" description="compiles the code">
     <javac srcdir="src" destdir="build" includeantruntime="false" debuglevel="lines,source">
+      <compilerarg value="-Xlint:unchecked"/>
       <classpath refid="classpath" /> 
     </javac>
   </target>

@@ -19,16 +19,20 @@ public class GEAR_scraper_GUI implements ItemListener{
     private GEAR_scraper x;
     private ArrayList<GECourse> p;
     private ArrayList<JCheckBox> cboxes;
-    private JList list;
+    private JList<GECourse> list;
     private GECourse[] courseArray;
     private JFrame frame;
     private JScrollPane scrollPane;
+    private JButton customURLButton;
     private void go(){
+	MyButtonListener mbl = new MyButtonListener();
+	customURLButton = new JButton("Custom URL");
+	customURLButton.setActionCommand("url");
 	x = new GEAR_scraper();
 	p = x.createArrayList();
 	courseArray = new GECourse[p.size()];
 	courseArray = p.toArray(courseArray);
-	list = new JList(courseArray);
+	list = new JList<GECourse>(courseArray);
 	frame = new JFrame();
 	frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	cboxes = new ArrayList<JCheckBox>();
@@ -41,6 +45,8 @@ public class GEAR_scraper_GUI implements ItemListener{
 	    temp.addItemListener(this);
 	    checkBoxPanel.add(temp);
 	}
+	customURLButton.addItemListener(mbl);
+	checkBoxPanel.add(customURLButton);
 	scrollPane = new JScrollPane(list);
 	scrollPane.setPreferredSize(new Dimension(250,500));
 	frame.getContentPane().add(BorderLayout.EAST,scrollPane);
@@ -52,15 +58,39 @@ public class GEAR_scraper_GUI implements ItemListener{
     }
     
     public void itemStateChanged(ItemEvent e){
-	//so i can reuse some code ;)
-	String showString = "show";
-	for( JCheckBox checkbox: cboxes){
-	    if(checkbox.isSelected()){
-		showString += " " +checkbox.getText();
+
+
+	if(e.getSource() instanceof JCheckBox){
+	    //so i can reuse some code ;)
+	    String showString = "show";
+	    for( JCheckBox checkbox: cboxes){
+		if(checkbox.isSelected()){
+		    showString += " " +checkbox.getText();
+		}
 	    }
-	}
-	show(showString);
+	    show(showString);}
+
+
     }
+    
+    public class MyButtonListener implements ActionListener { 
+
+	public void actionPerformed(ActionEvent e) { 
+	    String action = e.getActionCommand();
+	    System.out.println(action+ " Button was pressed!");
+
+	    switch (action) {
+
+	    case "url": 
+		;
+
+	    case "save": 
+		System.out.println("I'm a savin'!");
+		break;
+
+	    }
+
+	}
 
     // stolen from my CLI interface
    public void show(String line){
@@ -113,7 +143,7 @@ public class GEAR_scraper_GUI implements ItemListener{
 	}
 	courseArray = new GECourse[temp.size()];
 	courseArray = temp.toArray(courseArray);
-	list = new JList(courseArray);
+	list = new JList<GECourse>(courseArray);
 	scrollPane.setVisible(false);
 	frame.getContentPane().remove(scrollPane);
 	scrollPane = new JScrollPane(list);
