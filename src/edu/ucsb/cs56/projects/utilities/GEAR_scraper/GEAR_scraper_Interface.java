@@ -18,7 +18,7 @@ public class GEAR_scraper_Interface{
     private GEAR_scraper x;
     private Scanner sc = new Scanner(System.in);
     private ArrayList<GECourse> p;
-    private String[] commands = {"help","quit","show all","customURL","show areaD","show areaE", "show areaF", "show areaG", "show areaH", "show specialArea", "show ethnicity", "show american", "show euro", "show writing", "You may also string together show commands for more complex queries eg: \n show ethnicity areaD \n show areaG american writing"};
+    private String[] commands = {"help","quit","show all","customURL","show areaD","show areaE", "show areaF", "show areaG", "show areaH", "show specialArea", "show ethnicity", "show american", "show euro", "show writing", "You may also string together show commands for more complex queries: \n show ethnicity areaD \n show areaG american writing"};
 
     public void go(String... args) {
 	if(args.length==0)
@@ -148,8 +148,10 @@ public class GEAR_scraper_Interface{
     public static void main(String... args){
 
 	if(args.length==0 || args.length==3){
-	GEAR_scraper_Interface n = new GEAR_scraper_Interface();
-	n.go(args);    
+	    System.out.println("Starting Gear Scraping...");
+	    GEAR_scraper_Interface n = new GEAR_scraper_Interface();
+	    System.out.println("Done Scraping Gear! Type help for help");
+	    n.go(args);    
 	}
 	else
 	    System.out.println("Improperly formatted arguments. \n This program takes either no arguments, or all three of the following: URLofGEAR StartPage EndPage");
