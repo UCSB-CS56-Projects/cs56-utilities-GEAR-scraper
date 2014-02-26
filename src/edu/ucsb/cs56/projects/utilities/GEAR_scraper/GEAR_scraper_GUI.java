@@ -21,13 +21,15 @@ public class GEAR_scraper_GUI implements ItemListener{
     private ArrayList<JCheckBox> cboxes;
     private JList list;
     private GECourse[] courseArray;
+    private JFrame frame;
+    private JScrollPane scrollPane;
     private void go(){
 	x = new GEAR_scraper();
 	p = x.createArrayList();
 	courseArray = new GECourse[p.size()];
 	courseArray = p.toArray(courseArray);
 	list = new JList(courseArray);
-	JFrame frame = new JFrame();
+	frame = new JFrame();
 	frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	cboxes = new ArrayList<JCheckBox>();
 	JCheckBox temp;
@@ -39,10 +41,13 @@ public class GEAR_scraper_GUI implements ItemListener{
 	    temp.addItemListener(this);
 	    checkBoxPanel.add(temp);
 	}
-	frame.getContentPane().add(BorderLayout.EAST,new JScrollPane(list));
+	scrollPane = new JScrollPane(list);
+	scrollPane.setPreferredSize(new Dimension(250,500));
+	frame.getContentPane().add(BorderLayout.EAST,scrollPane);
 	frame.setSize(600,500);
 	frame.getContentPane().add(BorderLayout.WEST,checkBoxPanel);
        	frame.setVisible(true);
+	show("show all");
 
     }
     
@@ -106,9 +111,16 @@ public class GEAR_scraper_GUI implements ItemListener{
 		if(!a.isEuroTrad()){
 		    temp.remove(i); continue; }}
 	}
-	for(GECourse f: temp){
-	    System.out.println(f);}
-	System.out.println("done");
+	courseArray = new GECourse[temp.size()];
+	courseArray = temp.toArray(courseArray);
+	list = new JList(courseArray);
+	scrollPane.setVisible(false);
+	frame.getContentPane().remove(scrollPane);
+	scrollPane = new JScrollPane(list);
+	scrollPane.setPreferredSize(new Dimension(250,500));
+	frame.getContentPane().add(BorderLayout.EAST,scrollPane);
+	frame.invalidate();
+	frame.validate();
    }
 
     public static void main(String... args){
