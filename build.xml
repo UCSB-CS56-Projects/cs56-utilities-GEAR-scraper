@@ -29,10 +29,16 @@
   </target>
  
 
-  <target name="run" depends="compile">
+  <target name="run" depends="compile" description="runs with CLI">
     <java fork = "true" 
 classpathref="classpath"
 classname="edu.ucsb.cs56.projects.utilities.GEAR_scraper.GEAR_scraper_Interface" />
+  </target>
+
+  <target name="runWithGui" depends="compile" description="runs with GUI">
+    <java fork = "true" 
+classpathref="classpath"
+classname="edu.ucsb.cs56.projects.utilities.GEAR_scraper.GEAR_scraper_GUI" />
   </target>
 
 

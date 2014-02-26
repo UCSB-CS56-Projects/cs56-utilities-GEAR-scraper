@@ -21,6 +21,8 @@ public class GEAR_scraper_Interface{
     private String[] commands = {"help","quit","show all","customURL","show areaD","show areaE", "show areaF", "show areaG", "show areaH", "show specialArea", "show ethnicity", "show american", "show euro", "show writing", "You may also string together show commands for more complex queries: \n show ethnicity areaD \n show areaG american writing"};
 
     public void go(String... args) {
+	System.out.println("Starting Gear Scraping...");
+
 	if(args.length==0)
 	    x = new GEAR_scraper();
 	else{
@@ -32,6 +34,7 @@ public class GEAR_scraper_Interface{
 
 	}
 	p = x.createArrayList();
+	System.out.println("Done Scraping Gear! Type help for help");
 
 	boolean done = false;
 	
@@ -76,7 +79,8 @@ public class GEAR_scraper_Interface{
 	    customURL();
 	}
     }
-
+    /** prints out all the classes that have the parameters you list. Note: it is an "and" relationship, not an "or". So show areaG areaF wouldnt display any results because a class can't fulfill both requirements
+     */
     public void show(String line){
 	//check if command formatted properly
 	if(!( line.contains("all") || line.contains("euro") || line.contains("ethnicity") || line.contains("american") || line.contains("writing") || line.contains("specialArea") || line.contains("areaH") || line.contains("areaG") || line.contains("areaF") || line.contains("areaE") || line.contains("areaD"))){
@@ -148,9 +152,7 @@ public class GEAR_scraper_Interface{
     public static void main(String... args){
 
 	if(args.length==0 || args.length==3){
-	    System.out.println("Starting Gear Scraping...");
 	    GEAR_scraper_Interface n = new GEAR_scraper_Interface();
-	    System.out.println("Done Scraping Gear! Type help for help");
 	    n.go(args);    
 	}
 	else
