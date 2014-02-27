@@ -12,12 +12,14 @@ import java.awt.*;
 
 /** GUI Interface class
  * @author Alan Buzdar
+ *  View the classes that are in the GEAR GE section for the '12-'13 catalog.
+ *  Can also input custom URL
  */
 
 
 public class GEAR_scraper_GUI implements ItemListener{
     private String[] commands = {"Area D","Area E", "Area F", "Area G", "Area H", "Special Area Requirements", "Ethnicity", "American Hist Inst", "European", "Writing"};
-    private GEAR_scraper x;
+    private GEAR_scraper scraper;
     private ArrayList<GECourse> p;
     private ArrayList<JCheckBox> cboxes;
     private JList<GECourse> list;
@@ -26,19 +28,22 @@ public class GEAR_scraper_GUI implements ItemListener{
     private JScrollPane scrollPane;
     private JButton customURLButton;
     private void go(){
+	//initialize variables
 	MyButtonListener mbl = new MyButtonListener();
 	customURLButton = new JButton("Custom URL");
-	customURLButton.setActionCommand("url");
-	x = new GEAR_scraper();
-	p = x.createArrayList();
+	scraper = new GEAR_scraper();
+	p = scraper.createArrayList();
 	courseArray = new GECourse[p.size()];
+	JCheckBox temp;
+	JPanel checkBoxPanel = new JPanel();
 	courseArray = p.toArray(courseArray);
 	list = new JList<GECourse>(courseArray);
 	frame = new JFrame();
 	frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	cboxes = new ArrayList<JCheckBox>();
-	JCheckBox temp;
-	JPanel checkBoxPanel = new JPanel();
+
+	//GUI CRAP
+	customURLButton.setActionCommand("url");
 	checkBoxPanel.setLayout(new BoxLayout(checkBoxPanel, BoxLayout.Y_AXIS));
 	for( String cmd: commands){
 	    temp = new JCheckBox(cmd);
@@ -58,6 +63,9 @@ public class GEAR_scraper_GUI implements ItemListener{
 
     }
     
+    /* reacts to checkboxes being clicked 
+     */
+
     public void itemStateChanged(ItemEvent e){
 
 
@@ -74,6 +82,8 @@ public class GEAR_scraper_GUI implements ItemListener{
 
     }
     
+    /* reacts to customURL Button being pressed.
+     */
     private class MyButtonListener implements ActionListener { 
 
 	public void actionPerformed(ActionEvent e) { 
@@ -101,12 +111,14 @@ public class GEAR_scraper_GUI implements ItemListener{
 		try{
 		    startPage = Integer.parseInt(start);
 		    endPage = Integer.parseInt(end);
+		    if(endPage-startPage > 10 )
+			throw new NumberFormatException();
 		}catch(NumberFormatException ex){
-		    JOptionPane.showMessageDialog(null,"Those weren't properly formatted numbers");
+		    JOptionPane.showMessageDialog(null,"Those weren't properly formatted numbers. Make sure to only put the page numbers the GE's are on.");
 		    return;
 		}
-	        x = new GEAR_scraper(url,startPage,endPage);
-		p = x.createArrayList();
+	        scraper = new GEAR_scraper(url,startPage,endPage);
+		p = scraper.createArrayList();
 		show("all");
 
 	    }
@@ -127,17 +139,10 @@ public class GEAR_scraper_GUI implements ItemListener{
 		continue;
 	    }
 	    if(line.contains("Area D")){
-		if(!a.isD()){
-		    temp.remove(i);
-		    continue;
-		}
-	    }
+		if(!a.isD()){temp.remove(i);continue;}  }
 	    if(line.contains("Area E")){
 		if(!a.isE()){
-		    temp.remove(i);
-		    continue;
-		}
-	    }
+		    temp.remove(i);continue;}}
 	    if(line.contains("Area F")){
 		if(!a.isF()){
 		    temp.remove(i); continue; }}
@@ -163,6 +168,8 @@ public class GEAR_scraper_GUI implements ItemListener{
 		if(!a.isEuroTrad()){
 		    temp.remove(i); continue; }}
 	}
+
+	//remake the list
 	courseArray = new GECourse[temp.size()];
 	courseArray = temp.toArray(courseArray);
 	list = new JList<GECourse>(courseArray);

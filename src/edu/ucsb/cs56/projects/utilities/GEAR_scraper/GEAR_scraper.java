@@ -91,9 +91,9 @@ public class GEAR_scraper  {
 		    area = "D";
 		else if(s.contains("perspective on world cultures") || s.contains("Area E"))
 		    area = "E";
-		else if(s.contains("Area F") || s.contains("Area f"))
+		else if(s.contains("Area F") || s.contains("Area f") ||  s.contains("F: Arts"))
 		    area = "F";
-		else if(s.contains("develop an appreciation of literature"))
+		else if(s.contains("develop an appreciation of literature") || s.contains("Area G"))
 		    area = "G";
 		else if(s.contains("Special Subject Area"))
 		    area = "S";

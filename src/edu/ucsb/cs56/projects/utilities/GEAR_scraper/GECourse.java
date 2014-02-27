@@ -119,53 +119,53 @@ public class GECourse implements CoEgeCourse{
 	    deptCode =  "CHIN";
 	else if(line.contains("Classics"))
 	    deptCode =  "CLASS";
-	else if(line.contains("Communication "))
+	else if(line.contains("Communication"))
 	    deptCode =  "COMM";
 	else if(line.contains("Comparative Literature"))
 	    deptCode =  "C LIT";
 	else if(line.contains("Computer Science"))
 	    deptCode =  "CMPSCI";
-	else if(line.contains("Counseling "))
+	else if(line.contains("Counseling"))
 	    deptCode =  "CNCSP";
-	else if(line.contains("Dance "))
+	else if(line.contains("Dance"))
 	    deptCode =  "DANCE";
 	else if(line.contains("Dynamical"))
 	    deptCode =  "DYNMNS";
 	else if(line.contains("Earth Science"))
 	    deptCode =  "EARTH";
-	else if(line.contains("East Asian Cultural Studies"))
+	else if(line.contains("East Asian Cultural Studies") || line.trim().equals("Studies"))
 	    deptCode =  "EACS";
-	else if(line.contains("Ecology "))
+	else if(line.contains("Ecology"))
 	    deptCode =  "EEMB";
-	else if(line.contains("Economics "))
+	else if(line.contains("Economics"))
 	    deptCode =  "ECON";
-	else if(line.contains("Education "))
+	else if(line.contains("Education"))
 	    deptCode =  "ED";
 	else if(line.contains("Electrical Computer Engineering"))
 	    deptCode =  "ECE";
 	else if(line.contains("Engineering Sciences"))
 	    deptCode =  "ENGR";
-	else if(line.contains("English "))
+	else if(line.contains("English"))
 	    deptCode =  "ENGL";
 	else if(line.contains("Environmental Science"))
 	    deptCode =  "ESM";
 	else if(line.contains("Environmental Studies"))
 	    deptCode =  "ENV S";
-	else if(line.contains("Exercise & Sport "))
+	else if(line.contains("Exercise & Sport"))
 	    deptCode =  "ESS";
-	else if(line.contains("Exercise Sport "))
+	else if(line.contains("Exercise Sport"))
 	    deptCode =  "ES";
-	else if(line.contains("Feminist "))
+	else if(line.contains("Feminist"))
 	    deptCode =  "FEMST";
 	else if(line.contains("Film Studies"))
 	    deptCode =  "FLMST";
-	else if(line.contains("French "))
+	else if(line.contains("French"))
 	    deptCode =  "FR";
 	else if(line.contains("General Studies"))
 	    deptCode =  "GEN S";
-	else if(line.contains("Geography "))
+	else if(line.contains("Geography"))
 	    deptCode =  "GEO";
-	else if(line.contains("German "))
+	else if(line.contains("German"))
 	    deptCode =  "GER";
 	else if(line.contains("Global Peace and Security"))
 	    deptCode =  "GPS";
