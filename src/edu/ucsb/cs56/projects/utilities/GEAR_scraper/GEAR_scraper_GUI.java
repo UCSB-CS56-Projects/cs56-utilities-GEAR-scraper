@@ -1,6 +1,7 @@
 package edu.ucsb.cs56.projects.utilities.GEAR_scraper;
 
 import java.net.URL;
+import java.net.MalformedURLException;
 import java.io.FileInputStream;
 import java.io.InputStream;
 import java.io.IOException;
@@ -80,25 +81,33 @@ public class GEAR_scraper_GUI implements ItemListener{
 	    switch (action) {
 
 	    case "url": 
-		MyButtonListener mbl = this;
-		JFrame customURLWindow = new JFrame();
-		JButton submit = new JButton("submit");
-		JTextField fields = new JTextField("Type in Custom URL and page numbers",3);
-		
-		submit.setActionCommand("submit");
-		submit.addActionListener(mbl);
-		customURLWindow.setSize(600,400);
-		customURLWindow.getContentPane().add(BorderLayout.CENTER,fields);
-		submit.setPreferredSize(new Dimension(200,100));
-		customURLWindow.setVisible(true);
-		customURLWindow.getContentPane().add(BorderLayout.SOUTH,submit);
-	
 
-	
-	    case "submit":
-		//		x = new GEAR_scraper(new URL(line),Integer.parseInt(start),Integer.parseInt(end));
-		//	p = x.createArrayList();
-		
+		String line;
+		String start;
+		String end;
+		int startPage;
+		int endPage;
+		URL url;
+		line = JOptionPane.showInputDialog("Enter the URL");
+		try{
+		    url = new URL(line);
+		}catch(MalformedURLException ex){
+
+		    JOptionPane.showMessageDialog(null,"There was an error following the URL.");
+		    return;
+		}
+		start = JOptionPane.showInputDialog("Enter the page in GEAR the GE's start on");
+		end = JOptionPane.showInputDialog("Enter the page in GEAR the GE's end on");
+		try{
+		    startPage = Integer.parseInt(start);
+		    endPage = Integer.parseInt(end);
+		}catch(NumberFormatException ex){
+		    JOptionPane.showMessageDialog(null,"Those weren't properly formatted numbers");
+		    return;
+		}
+	        x = new GEAR_scraper(url,startPage,endPage);
+		p = x.createArrayList();
+		show("all");
 
 	    }
 
