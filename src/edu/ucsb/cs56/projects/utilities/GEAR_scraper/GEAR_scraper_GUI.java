@@ -45,7 +45,7 @@ public class GEAR_scraper_GUI implements ItemListener{
 	    temp.addItemListener(this);
 	    checkBoxPanel.add(temp);
 	}
-	customURLButton.addItemListener(mbl);
+	customURLButton.addActionListener(mbl);
 	checkBoxPanel.add(customURLButton);
 	scrollPane = new JScrollPane(list);
 	scrollPane.setPreferredSize(new Dimension(250,500));
@@ -73,24 +73,37 @@ public class GEAR_scraper_GUI implements ItemListener{
 
     }
     
-    public class MyButtonListener implements ActionListener { 
+    private class MyButtonListener implements ActionListener { 
 
 	public void actionPerformed(ActionEvent e) { 
 	    String action = e.getActionCommand();
-	    System.out.println(action+ " Button was pressed!");
-
 	    switch (action) {
 
 	    case "url": 
-		;
+		MyButtonListener mbl = this;
+		JFrame customURLWindow = new JFrame();
+		JButton submit = new JButton("submit");
+		JTextField fields = new JTextField("Type in Custom URL and page numbers",3);
+		
+		submit.setActionCommand("submit");
+		submit.addActionListener(mbl);
+		customURLWindow.setSize(600,400);
+		customURLWindow.getContentPane().add(BorderLayout.CENTER,fields);
+		submit.setPreferredSize(new Dimension(200,100));
+		customURLWindow.setVisible(true);
+		customURLWindow.getContentPane().add(BorderLayout.SOUTH,submit);
+	
 
-	    case "save": 
-		System.out.println("I'm a savin'!");
-		break;
+	
+	    case "submit":
+		//		x = new GEAR_scraper(new URL(line),Integer.parseInt(start),Integer.parseInt(end));
+		//	p = x.createArrayList();
+		
 
 	    }
 
 	}
+    }
 
     // stolen from my CLI interface
    public void show(String line){
