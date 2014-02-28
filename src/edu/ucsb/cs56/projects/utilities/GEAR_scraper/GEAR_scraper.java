@@ -55,10 +55,10 @@ public class GEAR_scraper  {
     public GEAR_scraper(URL url,int startPage,int endPage){
 	try{
 	    
-	    for(int i = 0;i<(endPage+1-startPage);i++){
+	    for(int i = startPage; i<endPage+1;i++){
 		BufferedInputStream is = new BufferedInputStream(url.openStream());
 		PDFTextParser myTester = new PDFTextParser();
-		String x = myTester.pdftoText(is,startPage+i);
+		String x = myTester.pdftoText(is,i);
 		textToParse.add(x);}
 
 
@@ -89,17 +89,17 @@ public class GEAR_scraper  {
 	    for(String s: page.split("\n")){
 		if(s.contains("Area D"))
 		    area = "D";
-		else if(s.contains("perspective on world cultures") || s.contains("Area E"))
+		else if(s.contains("perspective on world cultures") || s.contains("Area E") || s.contains("cultures through the study of human history"))
 		    area = "E";
 		else if(s.contains("Area F") || s.contains("Area f") ||  s.contains("F: Arts"))
 		    area = "F";
-		else if(s.contains("develop an appreciation of literature") || s.contains("Area G"))
+		else if(s.contains("develop an appreciation of literature") || s.contains("Area G") || s.contains("learn to analyza"))
 		    area = "G";
 		else if(s.contains("Special Subject Area"))
 		    area = "S";
 		else if(s.contains("Area H"))
 		    area = "H";
-		else if(isCourse(s) && !(area.equals("junk")))
+		else if(isCourse(s) && !(area.equals("junk")) && !s.contains("riting 2"))
 		    x.add(new GECourse(s,area));
 	}
 	}
