@@ -10,15 +10,16 @@
 
  
   <path id="classpath">
-    <pathelement location = "build" />
-    <pathelement location="lib/pdfbox-1.8.4.jar"/>  
-    <pathelement location="lib/junit-4.8.2.jar"/>  
-
-  </path>
+    <fileset dir="lib/">
+      <include name="**/*.jar"/>
+    </fileset>
+    <pathelement location="build"/>     
+  </path>  
 
   <mkdir dir="build" />
   <target name="compile" description="compiles the code">
     <javac srcdir="src" destdir="build" includeantruntime="false" debuglevel="lines,source">
+      <compilerarg value="-Xlint:unchecked"/>
       <classpath refid="classpath" /> 
     </javac>
   </target>
@@ -28,6 +29,19 @@
     <delete dir="build" quiet="true" />
   </target>
  
+
+  <target name="run" depends="compile" description="runs with CLI">
+    <java fork = "true" 
+classpathref="classpath"
+classname="edu.ucsb.cs56.projects.utilities.GEAR_scraper.GEAR_scraper_Interface" />
+  </target>
+
+  <target name="runWithGui" depends="compile" description="runs with GUI">
+    <java fork = "true" 
+classpathref="classpath"
+classname="edu.ucsb.cs56.projects.utilities.GEAR_scraper.GEAR_scraper_GUI" />
+  </target>
+
 
 <!-- ************* JUNIT TEST ************** -->
 
