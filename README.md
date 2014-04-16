@@ -3,6 +3,11 @@ cs-utilities-GEAR-scraper
 
 Scrape the UCSB Gear Catalog to form lists of structured information (e.g. course numbers that meet certain GE requirements.)
 
+project history
+===============
+```
+ W14 | andrewberls 5pm | alanbuzdar | Scrape the UCSB Gear Catalog to form lists of structured information
+```
 
 The GEAR catalog is here, as a PDF:
 
