@@ -27,17 +27,18 @@ import org.apache.pdfbox.pdmodel.common.PDStream;
 
 public class GEAR_scraper  {
     BufferedInputStream is;
-    String defaultURL = "http://engineering.ucsb.edu/current_undergraduates/pdf/GEAR-12-13.pdf";
+    String defaultURL = "http://engineering.ucsb.edu/current_undergraduates/pdf/GEAR-15-16.pdf";
     ArrayList<String> textToParse = new ArrayList<String>();
-    /**
-     * default constructor - uses '12-'13 GEAR, pages 12 through 19 
-    */
 
+
+    
+    // default constructor - uses '15-'16 GEAR, pages 14 through 22 
+    
   public GEAR_scraper(){
       //parse one page at a time
 	try{
-	    int startPage = 12;
-	    for(int i = 0;i<8;i++){
+	    int startPage = 14;
+	    for(int i = 0;i<9;i++){
 		is = new BufferedInputStream( (new URL(defaultURL)).openStream());
 		PDFTextParser myTester = new PDFTextParser();
 		String x = myTester.pdftoText(is,startPage+i);
@@ -59,10 +60,10 @@ public class GEAR_scraper  {
 		BufferedInputStream is = new BufferedInputStream(url.openStream());
 		PDFTextParser myTester = new PDFTextParser();
 		String x = myTester.pdftoText(is,i);
-		textToParse.add(x);}
+		textToParse.add(x);
+	    }
 
-
-    }catch(IOException e){
+    } catch(IOException e){
 	e.printStackTrace();
     }
     }
@@ -101,7 +102,7 @@ public class GEAR_scraper  {
 		    area = "H";
 		else if(isCourse(s) && !(area.equals("junk")) && !s.contains("riting 2"))
 		    x.add(new GECourse(s,area));
-	}
+	    }
 	}
 
 
