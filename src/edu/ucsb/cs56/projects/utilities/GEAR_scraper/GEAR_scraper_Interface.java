@@ -15,7 +15,7 @@ import java.util.Scanner;
 public class GEAR_scraper_Interface{
 
     private String prompt = "> ";
-    private GEAR_scraper x;
+	private GEAR_scraper x;
     private Scanner sc = new Scanner(System.in);
     private ArrayList<GECourse> p;
     private String[] commands = {"help","quit","show all","customURL","show areaD","show areaE", "show areaF", "show areaG", "show areaH", "show specialArea", "show ethnicity", "show american", "show euro", "show writing", "You may also string together show commands for more complex queries: \n show ethnicity areaD \n show areaG american writing"};
