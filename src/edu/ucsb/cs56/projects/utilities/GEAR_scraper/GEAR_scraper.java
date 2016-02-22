@@ -87,7 +87,7 @@ public class GEAR_scraper {
     }
 
     /**
-     * Creates and arraylist of the course objects and returns it.
+     * Creates an arraylist of the course objects and returns it.
      *
      * @return an ArrayList of GECourse objects from the text parsed in the constructor.
      * @see GECourse

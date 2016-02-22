@@ -29,24 +29,46 @@ public class GEAR_scraper_GUI implements ItemListener {
     private JFrame frame;
     private JScrollPane scrollPane;
     private JButton customURLButton;
+    private JButton clearCourses;
+    private JTextField searchBar;
+    private ArrayList<String> foundCourseList;
+    private JTextField foundCourses;
+    private boolean firstSearch = true;
+
 
     private void go() {
 
         //initialize variables
         MyButtonListener mbl = new MyButtonListener();
+        MySearchBarListener msbl = new MySearchBarListener();
         customURLButton = new JButton("Custom URL");
         scraper = new GEAR_scraper(); // uses the default url
         p = scraper.createArrayList(); // p is an ArrayList of GECourse objects
         courseArray = new GECourse[p.size()];
 		courseArray = p.toArray(courseArray); // use p to create an array, courseArray
 
-        list = new JList<GECourse>(courseArray); // A graphical list of GECouse objects
+        searchBar = new JTextField("Search for a Course: ", 20);
+        foundCourses = new JTextField("Found Courses: ", 20);
+        foundCourseList = new ArrayList<String>();
+        clearCourses = new JButton("Clear Course Schedule");
+        clearCourses.setActionCommand("clear");
 
+        // A graphical list of GECouse objects
+        list = new JList<GECourse>(courseArray);
+
+
+        // Builds the Checkbox panel, checkbox ArrayList
         JPanel checkBoxPanel = new JPanel();
+
+        checkBoxPanel.add(searchBar);
+        checkBoxPanel.add(foundCourses);
+        checkBoxPanel.add(clearCourses);
+
         frame = new JFrame();
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         JCheckBox temp;
         cboxes = new ArrayList<JCheckBox>();
+
 
         //GUI CRAP
         customURLButton.setActionCommand("url");
@@ -58,11 +80,21 @@ public class GEAR_scraper_GUI implements ItemListener {
             checkBoxPanel.add(temp);
         }
 
+
+        // set up everything to add to the frame
+
         customURLButton.addActionListener(mbl);
         checkBoxPanel.add(customURLButton);
 
+        searchBar.addActionListener(msbl);
+        clearCourses.addActionListener(mbl);
+
         scrollPane = new JScrollPane(list);
         scrollPane.setPreferredSize(new Dimension(250, 500));
+
+
+        // Add everything to the frame
+
         frame.getContentPane().add(BorderLayout.EAST, scrollPane);
         frame.setSize(600, 500);
         frame.getContentPane().add(BorderLayout.WEST, checkBoxPanel);
@@ -70,7 +102,8 @@ public class GEAR_scraper_GUI implements ItemListener {
         show("show all");
 
     }
-    
+
+
     /* reacts to checkboxes being clicked 
      */
 
@@ -90,6 +123,43 @@ public class GEAR_scraper_GUI implements ItemListener {
 
 
     }
+
+    /* reacts to searches
+
+     */
+
+    private class MySearchBarListener implements ActionListener {
+
+        public void actionPerformed(ActionEvent e) {
+            // want to search the array of courses for the entered course
+            String query = searchBar.getText().substring(21);
+            searchBar.setText("Search for a Course: ");
+
+
+            for (int i = p.size() - 1; i >= 0; i--) {
+                String course = p.get(i).toString();
+
+                if (course.equalsIgnoreCase(query) && !foundCourseList.contains(course)) {
+                    if (firstSearch) {
+                        foundCourses.setText(foundCourses.getText() + "\n" + course);
+                        firstSearch = false;
+                    } else {
+                        foundCourses.setText(foundCourses.getText() + ", " + course);
+                    }
+                    foundCourseList.add(course);
+
+
+                }
+            }
+
+
+        }
+
+    }
+
+
+
+
 
     /* reacts to customURL Button being pressed.
      */
@@ -130,10 +200,20 @@ public class GEAR_scraper_GUI implements ItemListener {
                     p = scraper.createArrayList();
                     show("all");
 
+
+                case "clear":
+
+                    foundCourses.setText("Found Courses: ");
+                    foundCourseList.clear();
+                    firstSearch = true;
+
             }
 
         }
     }
+
+
+
 
     // stolen from my CLI interface
     public void show(String line) {
@@ -225,6 +305,9 @@ public class GEAR_scraper_GUI implements ItemListener {
         frame.invalidate();
         frame.validate();
     }
+
+
+
 
     public static void main(String... args) {
         GEAR_scraper_GUI gui = new GEAR_scraper_GUI();
