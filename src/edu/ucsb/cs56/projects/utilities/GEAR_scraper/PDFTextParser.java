@@ -108,7 +108,7 @@ public class PDFTextParser {
         String parsedText = null;
         PDFTextStripperByArea pdfStripper;
         PDDocument pdDoc = null;
-        Rectangle rect, rect2;
+        Rectangle leftside, rightside;
 
         // try to create a new PDFParser
         try {
