@@ -65,7 +65,7 @@ public class PDFTextParser {
         // try to parse the PDF document
         try {
 
-            PDFTextStripper pdfStripper = PDFTextStripper();
+            PDFTextStripper pdfStripper = new PDFTextStripper();
 
             parser.parse();
 
