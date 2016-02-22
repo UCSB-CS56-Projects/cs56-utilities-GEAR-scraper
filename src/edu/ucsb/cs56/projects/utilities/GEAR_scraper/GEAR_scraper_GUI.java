@@ -41,10 +41,11 @@ public class GEAR_scraper_GUI implements ItemListener {
 		courseArray = p.toArray(courseArray); // use p to create an array, courseArray
 
         list = new JList<GECourse>(courseArray); // A graphical list of GECouse objects
-        JCheckBox temp;
+
         JPanel checkBoxPanel = new JPanel();
         frame = new JFrame();
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        JCheckBox temp;
         cboxes = new ArrayList<JCheckBox>();
 
         //GUI CRAP
