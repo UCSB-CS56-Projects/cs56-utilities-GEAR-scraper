@@ -14,7 +14,7 @@ import java.awt.*;
  * GUI Interface class
  *
  * @author Alan Buzdar
- *         View the classes that are in the GEAR GE section for the '12-'13 catalog.
+ *         View the classes that are in the GEAR GE section for the '15-'16 catalog.
  *         Can also input custom URL
  */
 

@@ -25,9 +25,11 @@ import org.apache.pdfbox.pdmodel.common.PDStream;
 
 
 public class GEAR_scraper {
+
     BufferedInputStream is;
     String defaultURL = "http://engineering.ucsb.edu/current_undergraduates/pdf/GEAR-15-16.pdf";
     ArrayList<String> textToParse = new ArrayList<String>();
+
 
 
     // default constructor - uses '15-'16 GEAR, pages 14 through 22
@@ -46,6 +48,7 @@ public class GEAR_scraper {
             e.printStackTrace();
         }
     }
+
 
     /**
      * Constructor - uses PDFParser to create Gear_scraper object.
@@ -68,6 +71,7 @@ public class GEAR_scraper {
             e.printStackTrace();
         }
     }
+
 
     /**
      * just a helper function that checks if the line of text is a course

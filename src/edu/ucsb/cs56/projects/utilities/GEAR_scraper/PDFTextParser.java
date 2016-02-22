@@ -45,32 +45,39 @@ public class PDFTextParser {
 
         File file = new File(fileName);
 
+        // checks to see that the file is valid
         if (!file.isFile()) {
             System.err.println("File " + fileName + " does not exist.");
             return null;
         }
         // try to create a new PDFParser
         try {
+
             parser = new PDFParser(new FileInputStream(file));
+
+
         } catch (IOException e) {
+
             System.err.println("Unable to open PDF Parser. " + e.getMessage());
             return null;
+
         }
         // try to parse the PDF document
         try {
-            PDFTextStripper pdfStripper = null;
+
+            PDFTextStripper pdfStripper = PDFTextStripper();
 
             parser.parse();
+
             cosDoc = parser.getDocument();
-
-            pdfStripper = new PDFTextStripper();
             pdDoc = new PDDocument(cosDoc);
-
             parsedText = pdfStripper.getText(pdDoc);
+
+
         } catch (Exception e) {
-            System.err
-                    .println("An exception occured in parsing the PDF Document."
-                            + e.getMessage());
+
+            System.err.println("An exception occured in parsing the PDF Document." + e.getMessage());
+
         }
         // If the document opened, close the two objects that used it
         finally {
@@ -88,12 +95,14 @@ public class PDFTextParser {
 
 
     /**
-     * Extract text by page from PDF Document via an InputStream (such as a URL)
+     * Extract text by page from PDF Document via an InputStream (such as a URL), uses the setSortByPosition(true) method
      *
      * @param is   an InputStream from which to read (likely a URL)
      * @param page specifies the page you want to start on (note, this goes by the pageNumber of the pdf itself, not the text you are reading)for example, for the 2012/2013 catalog, the course list appears to start on page 10, but actually starts on 12.
      *             reads the left side of the page, followed by the right.
      */
+
+
     public static String pdftoText(BufferedInputStream is, int page) {
         PDFParser parser;
         String parsedText = null;
@@ -103,35 +112,46 @@ public class PDFTextParser {
 
         // try to create a new PDFParser
         try {
+
             parser = new PDFParser(is);
             pdfStripper = new PDFTextStripperByArea();
+
         } catch (IOException e) {
+
             System.err.println("Unable to open PDF Parser. " + e.getMessage());
             return null;
-        }
-        // try to parse the PDF document
+
+        } // try to parse the PDF document
         try {
+
             parser.parse();
             pdDoc = parser.getPDDocument();
+
             pdfStripper.setSortByPosition(true);
+
             //rect is left side of page
-            rect = new Rectangle(0, 0, 300, 800);
+            leftside = new Rectangle(0, 0, 300, 800);
             //rect 2 is right side of page
-            rect2 = new Rectangle(300, 0, 1000, 800);
+            rightside = new Rectangle(300, 0, 1000, 800);
+
             // List holds a collections of PDPages
             List allPages = pdDoc.getDocumentCatalog().getAllPages();
             PDPage firstPage = (PDPage) allPages.get(page - 1);
+
             // determines region by using a Rectangle object
-            pdfStripper.addRegion("class1", rect);
-            pdfStripper.addRegion("class2", rect2);
+            pdfStripper.addRegion("class1", leftside);
+            pdfStripper.addRegion("class2", rightside);
             pdfStripper.extractRegions(firstPage);
+
             //add left and right side
             parsedText = pdfStripper.getTextForRegion("class1") + pdfStripper.getTextForRegion("class2");
 
         } catch (Exception e) {
+
             System.err
                     .println("An exception occured in parsing the PDF Document."
                             + e.getMessage());
+
         }
         // If the document opened, close the two objects that used it
         finally {
