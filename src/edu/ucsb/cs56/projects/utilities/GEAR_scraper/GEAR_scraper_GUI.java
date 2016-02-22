@@ -22,17 +22,26 @@ import java.awt.*;
 public class GEAR_scraper_GUI implements ItemListener {
     private String[] commands = {"Area D", "Area E", "Area F", "Area G", "Area H", "Special Area Requirements", "Ethnicity", "American Hist Inst", "European", "Writing"};
     private GEAR_scraper scraper;
-    private ArrayList<GECourse> p;
+
+    private ArrayList<GECourse> allGEs;          // ArrayList of GE Course Objects, pulled directly from the scraper
+    private GECourse[] allGEArray;               // Created from the allGEs ArrayList
+
+    private ArrayList<GECourse> filteredGEs;     // displayed when the checkboxes are clicked to narrow the search
+    private GECourse[] filteredGEList;           // displayed when the checkboxes are clicked to narrow the search
+
+    private JList<GECourse> allGEList;           // This is the scrollable page for all of the GE courses
+
     private ArrayList<JCheckBox> cboxes;
-    private JList<GECourse> list;
-    private GECourse[] courseArray;
+
     private JFrame frame;
-    private JScrollPane scrollPane;
+    private JScrollPane scrollPane;              // the scrollable pane that displays the courses
+
     private JButton customURLButton;
     private JButton clearCourses;
     private JTextField searchBar;
 
-    private ArrayList<String> foundCourseList;
+    private ArrayList<String> foundCourseList;   // used to add to the Found Courses List
+
     private JTextField foundCourses;
     private boolean firstSearch = true;
 
@@ -43,10 +52,12 @@ public class GEAR_scraper_GUI implements ItemListener {
         MyButtonListener mbl = new MyButtonListener();
         MySearchBarListener msbl = new MySearchBarListener();
         customURLButton = new JButton("Custom URL");
-        scraper = new GEAR_scraper(); // uses the default url
-        p = scraper.createArrayList(); // p is an ArrayList of GECourse objects
-        courseArray = new GECourse[p.size()];
-		courseArray = p.toArray(courseArray); // use p to create an array, courseArray
+        scraper = new GEAR_scraper();                              // uses the default url
+        allGEs = scraper.createArrayList();                        // allGEs is an ArrayList of GECourse objects
+        allGEArray = new GECourse[allGEs.size()];
+		allGEArray = allGEs.toArray(allGEArray);                   // use allGEs to create an array, allGEArray
+
+        filteredGEs = new ArrayList<GECourse>(allGEs);             // used in the show method and the searchBar Listener
 
         searchBar = new JTextField("Search for a Course: ", 20);
         foundCourses = new JTextField("Found Courses: ", 20);
@@ -55,7 +66,7 @@ public class GEAR_scraper_GUI implements ItemListener {
         clearCourses.setActionCommand("clear");
 
         // A graphical list of GECouse objects
-        list = new JList<GECourse>(courseArray);
+        allGEList = new JList<GECourse>(allGEArray);
 
 
         // Builds the Checkbox panel, checkbox ArrayList
@@ -87,10 +98,10 @@ public class GEAR_scraper_GUI implements ItemListener {
         customURLButton.addActionListener(mbl);
         checkBoxPanel.add(customURLButton);
 
-        searchBar.addActionListener(msbl);
-        clearCourses.addActionListener(mbl);
+        searchBar.addActionListener(msbl);   // my search bar listener
+        clearCourses.addActionListener(mbl); // my button listener
 
-        scrollPane = new JScrollPane(list);
+        scrollPane = new JScrollPane(allGEList);
         scrollPane.setPreferredSize(new Dimension(250, 500));
 
 
@@ -133,12 +144,12 @@ public class GEAR_scraper_GUI implements ItemListener {
 
         public void actionPerformed(ActionEvent e) {
             // want to search the array of courses for the entered course
-            String query = searchBar.getText().substring(21);
+            String query = searchBar.getText().substring(21); // only gets the course being searched
             searchBar.setText("Search for a Course: ");
 
-
-            for (int i = p.size() - 1; i >= 0; i--) {
-                String course = p.get(i).toString();
+            // want to search for courses in the filteredGE list so that the checkboxes can narrow down the search before hand
+            for (int i = filteredGEs.size() - 1; i >= 0; i--) {
+                String course = filteredGEs.get(i).toString();
 
                 if (course.equalsIgnoreCase(query) && !foundCourseList.contains(course)) {
                     if (firstSearch) {
@@ -198,11 +209,12 @@ public class GEAR_scraper_GUI implements ItemListener {
                         return;
                     }
                     scraper = new GEAR_scraper(url, startPage, endPage);
-                    p = scraper.createArrayList();
+                    allGEs = scraper.createArrayList();
                     show("all");
 
 
                 case "clear": // CODE SMELL
+                    // will need to be adapted for the scrollable text box
 
                     foundCourses.setText("Found Courses: ");
                     foundCourseList.clear();
@@ -220,85 +232,89 @@ public class GEAR_scraper_GUI implements ItemListener {
     public void show(String line) {
 
         GECourse a;
-        ArrayList<GECourse> temp = new ArrayList<GECourse>(p);
+        // resets the filteredGEs array on every checkbox clicked to update the scrollPane
+        filteredGEs = new ArrayList<GECourse>(allGEs);
 
-        for (int i = temp.size() - 1; i >= 0; i--) {
-            a = temp.get(i);
+        for (int i = filteredGEs.size() - 1; i >= 0; i--) {
+            a = filteredGEs.get(i);
             if (a.getCourseNum() == null) {
-                temp.remove(i);
+                filteredGEs.remove(i);
                 continue;
             }
             if (line.contains("Area D")) {
                 if (!a.isD()) {
-                    temp.remove(i);
+                    filteredGEs.remove(i);
                     continue;
                 }
             }
             if (line.contains("Area E")) {
                 if (!a.isE()) {
-                    temp.remove(i);
+                    filteredGEs.remove(i);
                     continue;
                 }
             }
             if (line.contains("Area F")) {
                 if (!a.isF()) {
-                    temp.remove(i);
+                    filteredGEs.remove(i);
                     continue;
                 }
             }
             if (line.contains("Area G")) {
                 if (!a.isG()) {
-                    temp.remove(i);
+                    filteredGEs.remove(i);
                     continue;
                 }
             }
             if (line.contains("Area H")) {
                 if (!a.isH()) {
-                    temp.remove(i);
+                    filteredGEs.remove(i);
                     continue;
                 }
             }
             if (line.contains("Special Area")) {
                 if (!a.isS()) {
-                    temp.remove(i);
+                    filteredGEs.remove(i);
                     continue;
                 }
             }
             if (line.contains("Writing")) {
                 if (!a.isWriting()) {
-                    temp.remove(i);
+                    filteredGEs.remove(i);
                     continue;
                 }
             }
             if (line.contains("American")) {
                 if (!a.isAmHistInst()) {
-                    temp.remove(i);
+                    filteredGEs.remove(i);
                     continue;
                 }
             }
             if (line.contains("Ethnicity")) {
                 if (!a.isEthnicity()) {
-                    temp.remove(i);
+                    filteredGEs.remove(i);
                     continue;
                 }
             }
             if (line.contains("European")) {
                 if (!a.isEuroTrad()) {
-                    temp.remove(i);
+                    filteredGEs.remove(i);
                     continue;
                 }
             }
         }
 
-        //remake the list
-        courseArray = new GECourse[temp.size()];
-        courseArray = temp.toArray(courseArray);
+        // filteredGEs is now an array of all of the GECourses that the user wants to diplay
 
-        list = new JList<GECourse>(courseArray);
+        //remake the list with the filteredGEs array
+        allGEArray = new GECourse[filteredGEs.size()];
+        allGEArray = filteredGEs.toArray(allGEArray);
+
+
+        allGEList = new JList<GECourse>(allGEArray);
         scrollPane.setVisible(false);
 
         frame.getContentPane().remove(scrollPane);
-        scrollPane = new JScrollPane(list);
+        scrollPane = new JScrollPane(allGEList);
 
         scrollPane.setPreferredSize(new Dimension(250, 500));
         frame.getContentPane().add(BorderLayout.EAST, scrollPane);
