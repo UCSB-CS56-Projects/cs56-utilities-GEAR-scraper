@@ -212,12 +212,16 @@ public class GEAR_scraper_GUI implements ItemListener {
         //remake the list
         courseArray = new GECourse[temp.size()];
         courseArray = temp.toArray(courseArray);
+        slight
         list = new JList<GECourse>(courseArray);
         scrollPane.setVisible(false);
+
         frame.getContentPane().remove(scrollPane);
         scrollPane = new JScrollPane(list);
+
         scrollPane.setPreferredSize(new Dimension(250, 500));
         frame.getContentPane().add(BorderLayout.EAST, scrollPane);
+
         frame.invalidate();
         frame.validate();
     }
