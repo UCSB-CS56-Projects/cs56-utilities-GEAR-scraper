@@ -31,6 +31,7 @@ public class GEAR_scraper_GUI implements ItemListener {
     private JButton customURLButton;
     private JButton clearCourses;
     private JTextField searchBar;
+
     private ArrayList<String> foundCourseList;
     private JTextField foundCourses;
     private boolean firstSearch = true;
@@ -169,7 +170,7 @@ public class GEAR_scraper_GUI implements ItemListener {
             String action = e.getActionCommand();
             switch (action) {
 
-                case "url":
+                case "url": // CODE SMELL
 
                     String line;
                     String start;
@@ -201,7 +202,7 @@ public class GEAR_scraper_GUI implements ItemListener {
                     show("all");
 
 
-                case "clear":
+                case "clear": // CODE SMELL
 
                     foundCourses.setText("Found Courses: ");
                     foundCourseList.clear();
