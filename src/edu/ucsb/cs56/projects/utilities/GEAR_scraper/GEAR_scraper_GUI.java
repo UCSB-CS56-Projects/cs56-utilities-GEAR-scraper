@@ -33,8 +33,11 @@ public class GEAR_scraper_GUI implements ItemListener {
 
     private ArrayList<JCheckBox> cboxes;
 
+    private JPanel checkBoxPanel;
+
     private JFrame frame;
     private JScrollPane scrollPane;              // the scrollable pane that displays the courses
+    private JScrollPane addedCoursePane;
 
     private JButton customURLButton;
     private JButton clearCourses;
@@ -42,8 +45,11 @@ public class GEAR_scraper_GUI implements ItemListener {
 
     private ArrayList<String> foundCourseList;   // used to add to the Found Courses List
 
+
+    private ArrayList<String> addedCourseArr; // should only need this to save the searched classes
+    private JList<String> addedCourseList;    // Jlist of the saved coruses
+
     private JTextField foundCourses;
-    private boolean firstSearch = true;
 
 
     private void go() {
@@ -69,11 +75,23 @@ public class GEAR_scraper_GUI implements ItemListener {
         allGEList = new JList<GECourse>(allGEArray);
 
 
+        // USed for the saved Course JList
+        addedCourseArr = new ArrayList<String>();
+        addedCourseList = new JList<String>(addedCourseArr.toArray(new String[addedCourseArr.size()]));
+
+
+
         // Builds the Checkbox panel, checkbox ArrayList
-        JPanel checkBoxPanel = new JPanel();
+        checkBoxPanel = new JPanel();
 
         checkBoxPanel.add(searchBar);
-        checkBoxPanel.add(foundCourses);
+        //checkBoxPanel.add(foundCourses);
+
+        addedCoursePane = new JScrollPane(); // empty JScrollPane for the courses that have been searched and added
+        // set the dimensions of the JScrollPane
+        addedCoursePane.setPreferredSize(new Dimension(100, 100));
+        checkBoxPanel.add(addedCoursePane);
+
         checkBoxPanel.add(clearCourses);
 
         frame = new JFrame();
@@ -151,19 +169,34 @@ public class GEAR_scraper_GUI implements ItemListener {
             for (int i = filteredGEs.size() - 1; i >= 0; i--) {
                 String course = filteredGEs.get(i).toString();
 
-                if (course.equalsIgnoreCase(query) && !foundCourseList.contains(course)) {
-                    if (firstSearch) {
-                        foundCourses.setText(foundCourses.getText() + "\n" + course);
-                        firstSearch = false;
-                    } else {
-                        foundCourses.setText(foundCourses.getText() + ", " + course);
-                    }
-                    foundCourseList.add(course);
 
+                if (course.equalsIgnoreCase(query) && !foundCourseList.contains(course)) {
+                    // add the course to the addedCourseArr
+
+                    addedCourseArr.add(course);
+                    foundCourseList.add(course);
 
                 }
             }
 
+            // the addedCourseArr now contains a new item, need to update the JList and update the frame
+
+            // want to add to the array and then add to the course list
+            // need to convert the ArrayList to an array to pass to the JList
+
+            // creates the new JLIst
+            addedCourseList = new JList<String>(addedCourseArr.toArray(new String[addedCourseArr.size()]));
+
+            // removes the old addedCoursePane from the frame, makes a new one and then adds it back
+            addedCoursePane.setVisible(false);
+            // removes the scrollapne from the jpanel
+            checkBoxPanel.remove(addedCoursePane);
+            addedCoursePane = new JScrollPane(addedCourseList);
+            scrollPane.setPreferredSize(new Dimension(100, 100));
+            checkBoxPanel.add(addedCoursePane, 1); // want to add it back into the same place, index 1
+
+            frame.invalidate();
+            frame.validate();
 
         }
 
@@ -173,7 +206,8 @@ public class GEAR_scraper_GUI implements ItemListener {
 
 
 
-    /* reacts to customURL Button being pressed.
+    /* reacts to Buttons being pressed, this can be fixed as it is a procedural action listener
+    Would be better to implement another one for the Clear Courses button separately
      */
     private class MyButtonListener implements ActionListener {
 
@@ -216,9 +250,26 @@ public class GEAR_scraper_GUI implements ItemListener {
                 case "clear": // CODE SMELL
                     // will need to be adapted for the scrollable text box
 
-                    foundCourses.setText("Found Courses: ");
+                    //foundCourses.setText("Found Courses: ");
                     foundCourseList.clear();
-                    firstSearch = true;
+                    addedCourseArr.clear();
+
+                    // remakes the entire addedCoursesPane
+
+                    // need to clear the addedCoursesList and then update the JList
+                    addedCourseList = new JList<String>(addedCourseArr.toArray(new String[addedCourseArr.size()]));
+
+                    // removes the old addedCoursePane from the frame, makes a new one and then adds it back
+                    addedCoursePane.setVisible(false);
+                    // removes the scrollapne from the jpanel
+                    checkBoxPanel.remove(addedCoursePane);
+                    addedCoursePane = new JScrollPane(addedCourseList);
+                    scrollPane.setPreferredSize(new Dimension(100, 100));
+                    checkBoxPanel.add(addedCoursePane, 1); // want to add it back into the same place, index 1
+
+                    frame.invalidate();
+                    frame.validate();
+
 
             }
 
@@ -305,20 +356,21 @@ public class GEAR_scraper_GUI implements ItemListener {
 
         // filteredGEs is now an array of all of the GECourses that the user wants to diplay
 
-        //remake the list with the filteredGEs array
+        // creates a new array to pass to the JList
         allGEArray = new GECourse[filteredGEs.size()];
         allGEArray = filteredGEs.toArray(allGEArray);
 
-
+        // creates the new JList
         allGEList = new JList<GECourse>(allGEArray);
-        scrollPane.setVisible(false);
 
+        // removes the JList from the frame, makes a new one and then adds it back
+        scrollPane.setVisible(false);
         frame.getContentPane().remove(scrollPane);
         scrollPane = new JScrollPane(allGEList);
-
         scrollPane.setPreferredSize(new Dimension(250, 500));
         frame.getContentPane().add(BorderLayout.EAST, scrollPane);
 
+        // updates the frame to display the changes
         frame.invalidate();
         frame.validate();
     }
