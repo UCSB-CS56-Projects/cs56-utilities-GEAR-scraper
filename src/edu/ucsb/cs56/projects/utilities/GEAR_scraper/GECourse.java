@@ -72,20 +72,20 @@ public class GECourse implements CoEgeCourse{
     public String toString(){
 	return((deptCode+" "+courseNum).trim());
     }
-    public String getDeptInGear(){return deptInGear;} // department offering the course, exactly as formatted in GEAR
-                            // e.g. Anthropology
-	public String getDeptCode(){return deptCode;}  // department code (){e.g. ANTH} as in GOLD (){you'll have to translate to get that}
-    public String getCourseNum(){return courseNum;} // e.g. 118B 
-    public boolean isD(){return isD;} // its on the area D list
-    public boolean isE(){return isE;} // its on the area E list
-    public boolean isF(){return isF;} // its on the area F list
-    public boolean isG(){return isG;} // its on the area G list
-    public boolean isH(){return isH;} // its on the area F list
-    public boolean isS(){return isS;} // its on the area G list
-    public boolean isWriting(){return isWriting;} // This course applies toward the writing requirement. 
-    public boolean isAmHistInst(){return isAmHistInst;} // This course applies toward the American History & Institutions requirement.
-    public boolean isEthnicity(){return isEthnicity;} //  This course applies toward the ethnicity requirement.
-    public boolean isEuroTrad(){return isEuroTrad;} // This course applies toward the European Traditions requirement.
+    public String getDeptInGear(){return deptInGear;}    // department offering the course, exactly as formatted in GEAR
+                                                         // e.g. Anthropology
+	public String getDeptCode(){return deptCode;}        // department code (){e.g. ANTH} as in GOLD (){you'll have to translate to get that}
+    public String getCourseNum(){return courseNum;}      // e.g. 118B
+    public boolean isD(){return isD;}                    // its on the area D list
+    public boolean isE(){return isE;}                    // its on the area E list
+    public boolean isF(){return isF;}                    // its on the area F list
+    public boolean isG(){return isG;}                    // its on the area G list
+    public boolean isH(){return isH;}                    // its on the area F list
+    public boolean isS(){return isS;}                    // its on the area G list
+    public boolean isWriting(){return isWriting;}        // This course applies toward the writing requirement.
+    public boolean isAmHistInst(){return isAmHistInst;}  // This course applies toward the American History & Institutions requirement.
+    public boolean isEthnicity(){return isEthnicity;}    //  This course applies toward the ethnicity requirement.
+    public boolean isEuroTrad(){return isEuroTrad;}      // This course applies toward the European Traditions requirement.
 
     //helper function to set deptCode
     /** sets the dept code for the class based on the string inputted

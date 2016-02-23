@@ -148,9 +148,7 @@ public class PDFTextParser {
 
         } catch (Exception e) {
 
-            System.err
-                    .println("An exception occured in parsing the PDF Document."
-                            + e.getMessage());
+            System.err.println("An exception occured in parsing the PDF Document." + e.getMessage());
 
         }
         // If the document opened, close the two objects that used it
