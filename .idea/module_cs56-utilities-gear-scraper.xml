@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="module_cs56-utilities-gear-scraper" default="compile.module.cs56-utilities-gear-scraper">
+  <dirname property="module.cs56-utilities-gear-scraper.basedir" file="${ant.file.module_cs56-utilities-gear-scraper}"/>
+  
+  <property name="module.jdk.home.cs56-utilities-gear-scraper" value="${project.jdk.home}"/>
+  <property name="module.jdk.bin.cs56-utilities-gear-scraper" value="${project.jdk.bin}"/>
+  <property name="module.jdk.classpath.cs56-utilities-gear-scraper" value="${project.jdk.classpath}"/>
+  
+  <property name="compiler.args.cs56-utilities-gear-scraper" value="-encoding UTF-8 -source 8 -target 8 ${compiler.args}"/>
+  
+  <property name="cs56-utilities-gear-scraper.output.dir" value="undefined"/>
+  <property name="cs56-utilities-gear-scraper.testoutput.dir" value="undefined"/>
+  
+  <path id="cs56-utilities-gear-scraper.module.bootclasspath">
+    <!-- Paths to be included in compilation bootclasspath -->
+  </path>
+  
+  <path id="cs56-utilities-gear-scraper.module.production.classpath"/>
+  
+  <path id="cs56-utilities-gear-scraper.runtime.production.module.classpath"/>
+  
+  <path id="cs56-utilities-gear-scraper.module.classpath"/>
+  
+  <path id="cs56-utilities-gear-scraper.runtime.module.classpath"/>
+  
+  
+  <patternset id="excluded.from.module.cs56-utilities-gear-scraper">
+    <patternset refid="ignored.files"/>
+  </patternset>
+  
+  <patternset id="excluded.from.compilation.cs56-utilities-gear-scraper">
+    <patternset refid="excluded.from.module.cs56-utilities-gear-scraper"/>
+  </patternset>
+  
+  
+  <target name="compile.module.cs56-utilities-gear-scraper" depends="compile.module.cs56-utilities-gear-scraper.production,compile.module.cs56-utilities-gear-scraper.tests" description="Compile module cs56-utilities-GEAR-scraper"/>
+  
+  <target name="compile.module.cs56-utilities-gear-scraper.production" depends="register.custom.compilers" description="Compile module cs56-utilities-GEAR-scraper; production classes"/>
+  
+  <target name="compile.module.cs56-utilities-gear-scraper.tests" depends="register.custom.compilers,compile.module.cs56-utilities-gear-scraper.production" description="compile module cs56-utilities-GEAR-scraper; test classes" unless="skip.tests"/>
+  
+  <target name="clean.module.cs56-utilities-gear-scraper" description="cleanup module">
+    <delete dir="${cs56-utilities-gear-scraper.output.dir}"/>
+    <delete dir="${cs56-utilities-gear-scraper.testoutput.dir}"/>
+  </target>
+</project>
