@@ -160,11 +160,15 @@ public class GEAR_scraper_GUI implements ItemListener {
 
      */
 
+
+    // want to add the ability to prompt the user whether or not to add a course along with information about the course
     private class MySearchBarListener implements ActionListener {
 
         public void actionPerformed(ActionEvent e) {
             // want to search the array of courses for the entered course
-            String query = searchBar.getText().substring(21); // only gets the course being searched
+            // only gets the course being searched, text after "Search for a Course: "
+            String query = searchBar.getText().substring(21);
+            // reset the text in the search bar
             searchBar.setText("Search for a Course: ");
 
             // want to search for courses in the filteredGE list so that the checkboxes can narrow down the search before hand
