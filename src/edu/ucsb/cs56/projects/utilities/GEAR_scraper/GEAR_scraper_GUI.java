@@ -113,7 +113,7 @@ public class GEAR_scraper_GUI implements ItemListener {
         searchBarWrapper.setMaximumSize(new Dimension(SEARCH_PANEL_WIDTH, 25));
         // adds the title and search field to the search Bar Wrapper
         searchBarTitle = new JLabel("Search for a Course:");
-        searchBar = new JTextField(5);
+        searchBar = new JTextField(12);
         searchBarWrapper.add(BorderLayout.WEST, searchBarTitle);
         searchBarWrapper.add(BorderLayout.EAST, searchBar);
 
