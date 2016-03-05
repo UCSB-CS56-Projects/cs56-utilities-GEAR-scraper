@@ -82,10 +82,17 @@ public class GEAR_scraper {
         return defaultURL;
     }
 
+    /**
+     *  Gets the current GEAR years in the format: GEAR-startingyear-endingyear from the url
+     * @return
+     */
     public String getCurrentYears() {
         int len = defaultURL.length();
-        String GEARyear = defaultURL.substring(len - 14, len - 4);
-        return GEARyear;
+        String startYear = defaultURL.substring(len - 9, len - 7); // gets 15 from the default url
+        String endYear = defaultURL.substring(len - 6, len - 4);   // gets 16 from the default url
+
+        String GEARyears = "GEAR " + startYear + "/" + endYear;
+        return GEARyears;
     }
 
     /**
