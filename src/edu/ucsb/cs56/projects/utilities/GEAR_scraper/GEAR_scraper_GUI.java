@@ -23,6 +23,12 @@ public class GEAR_scraper_GUI implements ItemListener {
     private String[] commands = {"Area D", "Area E", "Area F", "Area G", "Area H", "Special Area Requirements", "Ethnicity", "American Hist Inst", "European", "Writing"};
     private GEAR_scraper scraper;
 
+    private int WINDOW_WIDTH;
+    private int WINDOW_HEIGHT;
+
+    private JPanel titleBox;
+    private JLabel title;
+
     private ArrayList<GECourse> allGEList;       // ArrayList of GE Course Objects, pulled directly from the scraper
     private GECourse[] allGEArray;               // Created from the allGEList ArrayList
     private JList<GECourse> allGEArr;            // This is the scrollable page for all of the GE courses
@@ -55,12 +61,28 @@ public class GEAR_scraper_GUI implements ItemListener {
 
     private void go() {
 
+        WINDOW_WIDTH = 600;
+        WINDOW_HEIGHT = 500;
+
         //initialize variables
         CustomURLButtonListener customURLBL = new CustomURLButtonListener();
         MySearchBarListener msbl = new MySearchBarListener();
         ClearCourseScheduleListener clearCourseScheduleBL = new ClearCourseScheduleListener();
+
         customURLButton = new JButton("Custom URL");
         scraper = new GEAR_scraper();                                 // uses the default url
+
+
+        // set the title of the window
+        title = new JLabel("Welcome to the GEAR Scraper for " + scraper.getCurrentYears() + "!");
+        title.setHorizontalAlignment(JLabel.CENTER);
+        // adds the title text to a JPanel and creates some space at the top
+        titleBox = new JPanel();
+        titleBox.setPreferredSize(new Dimension(30, 40));
+        //titleBox.setLayout()
+        titleBox.add(title);
+
+
         allGEList = scraper.createArrayList();                        // allGEList is an ArrayList of GECourse objects
         allGEArray = new GECourse[allGEList.size()];
 		allGEArray = allGEList.toArray(allGEArray);                   // use allGEList to create an array, allGEArray
@@ -82,12 +104,11 @@ public class GEAR_scraper_GUI implements ItemListener {
         addedCourseList = new JList<String>(addedCourseArr.toArray(new String[addedCourseArr.size()]));
 
 
-
         // Builds the Checkbox panel, checkbox ArrayList
         checkBoxPanel = new JPanel();
 
         checkBoxPanel.add(searchBar);
-        //checkBoxPanel.add(foundCourses);
+
 
         addedCoursePane = new JScrollPane(); // empty JScrollPane for the courses that have been searched and added
         // set the dimensions of the JScrollPane
@@ -96,14 +117,13 @@ public class GEAR_scraper_GUI implements ItemListener {
 
         checkBoxPanel.add(clearCourses);
 
-        frame = new JFrame();
+        frame = new JFrame("GEAR Scraper");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         JCheckBox temp;
         cboxes = new ArrayList<JCheckBox>();
 
 
         //GUI CRAP
-        //customURLButton.setActionCommand("url");
         checkBoxPanel.setLayout(new BoxLayout(checkBoxPanel, BoxLayout.Y_AXIS));
         for (String cmd : commands) {
             temp = new JCheckBox(cmd);
@@ -126,9 +146,9 @@ public class GEAR_scraper_GUI implements ItemListener {
 
 
         // Add everything to the frame
-
+        frame.getContentPane().add(BorderLayout.NORTH, titleBox);
         frame.getContentPane().add(BorderLayout.EAST, scrollPane);
-        frame.setSize(600, 500);
+        frame.setSize(WINDOW_WIDTH, WINDOW_HEIGHT);
         frame.getContentPane().add(BorderLayout.WEST, checkBoxPanel);
         frame.setVisible(true);
         show("show all");
@@ -198,7 +218,7 @@ public class GEAR_scraper_GUI implements ItemListener {
             // removes the scrollapne from the jpanel
             checkBoxPanel.remove(addedCoursePane);
             addedCoursePane = new JScrollPane(addedCourseList);
-            scrollPane.setPreferredSize(new Dimension(250, 500));
+            scrollPane.setPreferredSize(new Dimension(200, 500));
             checkBoxPanel.add(addedCoursePane, 1); // want to add it back into the same place, index 1
 
             frame.invalidate();

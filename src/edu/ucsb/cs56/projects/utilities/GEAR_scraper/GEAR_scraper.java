@@ -74,9 +74,24 @@ public class GEAR_scraper {
 
 
     /**
+     * Get the current GEAR default url, returns the default url as a string
+     * @return String of the current default url for the GEAR pdf
+     *
+     */
+    public String getCurrentDefualtURL() {
+        return defaultURL;
+    }
+
+    public String getCurrentYears() {
+        int len = defaultURL.length();
+        String GEARyear = defaultURL.substring(len - 14, len - 4);
+        return GEARyear;
+    }
+
+    /**
      * just a helper function that checks if the line of text is a course
      *
-     * @param s the line of text you want to check
+     * @param the line of text you want to check
      * @return true if it is a course, false if it isn't
      */
     private boolean isCourse(String s) {
