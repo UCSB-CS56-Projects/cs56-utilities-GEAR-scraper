@@ -51,9 +51,12 @@ public class GEAR_scraper_GUI implements ItemListener {
     private ArrayList<JCheckBox> cboxes;         // ArrayList of checkboxes
 
 
+    private JPanel BottomSearchPanel;
+
+
     private JFrame frame;
     private JScrollPane scrollPane;              // the scrollable pane that displays the courses
-    private JScrollPane addedCoursePane;         // scollable pane for the courses that the user adds
+    private JScrollPane addedCoursePanel;         // scollable pane for the courses that the user adds
 
     private JButton customURLButton;             // Custom url button for the GUI
     private JButton clearCoursesButton;                // Clear Courses button for the GUI
@@ -63,8 +66,8 @@ public class GEAR_scraper_GUI implements ItemListener {
 
 
     private ArrayList<String> addedCourseArr;    // should only need this to save the searched classes
-    private JList<String> addedCourseList;       // Jlist of the saved coruses
-
+    private JList<String> addedCourseList;       // Jlist of the saved courses
+    private DefaultListModel listModel;
 
 
     private void go() {
@@ -75,7 +78,7 @@ public class GEAR_scraper_GUI implements ItemListener {
         WINDOW_WIDTH = 600;
         WINDOW_HEIGHT = 500;
         ALLGE_SCROLLPANE_WIDTH = 250;
-        SEARCH_PANEL_WIDTH = 700;
+        SEARCH_PANEL_WIDTH = 600;
         CHECKBOX_PANEL_HEIGHT = 700;
 
         //initialize Listeners
@@ -109,20 +112,24 @@ public class GEAR_scraper_GUI implements ItemListener {
 
         // Search Bar
         searchBarWrapper = new JPanel();
-        searchBarWrapper.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+        searchBarWrapper.setLayout(new BoxLayout(searchBarWrapper, BoxLayout.X_AXIS));
+        // Used for GUI debugging
+        //searchBarWrapper.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+        searchBarWrapper.setAlignmentX(Component.LEFT_ALIGNMENT);
         searchBarWrapper.setMaximumSize(new Dimension(SEARCH_PANEL_WIDTH, 25));
         // adds the title and search field to the search Bar Wrapper
         searchBarTitle = new JLabel("Search for a Course:");
-        searchBar = new JTextField(12);
+        searchBar = new JTextField();
         searchBarWrapper.add(BorderLayout.WEST, searchBarTitle);
         searchBarWrapper.add(BorderLayout.EAST, searchBar);
 
 
-        // Found Course List to keep of duplicate searches
+        // Found Course List to keep track of duplicate searches
         foundCourseList = new ArrayList<String>();
-        // Used for the saved Course JList
         addedCourseArr = new ArrayList<String>();
         addedCourseList = new JList<String>(addedCourseArr.toArray(new String[addedCourseArr.size()]));
+        // makes the DefaultListModel for the addedCOurseList
+        listModel = new DefaultListModel<String>();
 
 
         // Clear Courses Button
@@ -135,25 +142,28 @@ public class GEAR_scraper_GUI implements ItemListener {
         checkBoxPanel.setMaximumSize(new Dimension(SEARCH_PANEL_WIDTH, CHECKBOX_PANEL_HEIGHT));
         SearchWrapper.setMaximumSize(new Dimension(SEARCH_PANEL_WIDTH, WINDOW_HEIGHT));
         SearchWrapper.setLayout(new BoxLayout(SearchWrapper, BoxLayout.Y_AXIS));
-        SearchWrapper.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+        // used for GUI debugging
+        //SearchWrapper.setBorder(BorderFactory.createLineBorder(Color.BLACK));
 
 
 
         // Builds the Found Courses Panel
-        addedCoursePane = new JScrollPane(); // empty JScrollPane for the courses that have been searched and added
-        addedCoursePane.setMaximumSize(new Dimension(SEARCH_PANEL_WIDTH, 400));
+        // empty JScrollPane for the courses that have been searched and added
+        addedCoursePanel = new JScrollPane(addedCourseList);
+        addedCoursePanel.setMaximumSize(new Dimension(SEARCH_PANEL_WIDTH, 400));
 
 
 
         frame = new JFrame("GEAR Scraper");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
+
+        // Setting up all of the Checkboxes
         JCheckBox temp;
         cboxes = new ArrayList<JCheckBox>();
-
-
-        // Setting up all of the CheckBoxes
         checkBoxPanel.setLayout(new BoxLayout(checkBoxPanel, BoxLayout.Y_AXIS));
-        checkBoxPanel.setBorder(BorderFactory.createLineBorder(Color.RED));
+        // Used for GUI debugging
+        //checkBoxPanel.setBorder(BorderFactory.createLineBorder(Color.RED));
         for (String cmd : commands) {
             temp = new JCheckBox(cmd);
             cboxes.add(temp);
@@ -170,18 +180,20 @@ public class GEAR_scraper_GUI implements ItemListener {
         clearCoursesButton.addActionListener(clearCoursesButtoncheduleBL); // clear Course Schedule Button Listener
 
 
-
-        // Add everything to the Wrapper
+        // Add course schedule, checkboxPanel, Custom URL
+        BottomSearchPanel = new JPanel();
+        BottomSearchPanel.setLayout(new BoxLayout(BottomSearchPanel, BoxLayout.Y_AXIS));
+        // Used for GUI debugging
+        // BottomSearchPanel.setBorder(BorderFactory.createLineBorder(Color.GREEN));
+        BottomSearchPanel.add(clearCoursesButton);
+        BottomSearchPanel.add(checkBoxPanel);
+        BottomSearchPanel.add(customURLButton);
         SearchWrapper.add(searchBarWrapper);
-        //searchBarWrapper.setAlignmentX(Component.LEFT_ALIGNMENT);
-        SearchWrapper.add(addedCoursePane);
-        SearchWrapper.add(clearCoursesButton);
-        SearchWrapper.add(checkBoxPanel);
-        //checkBoxPanel.setAlignmentX(Component.LEFT_ALIGNMENT);
-        SearchWrapper.add(customURLButton);
+        SearchWrapper.add(addedCoursePanel);
 
-
-        //clearCoursesButton.setAlignmentX(Component.LEFT_ALIGNMENT);
+        // left justfies everything underneath the addedCourse list.
+        BottomSearchPanel.setAlignmentX(Component.LEFT_ALIGNMENT);
+        SearchWrapper.add(BottomSearchPanel);
 
 
         // Adding the ALLGE Courses List
@@ -243,35 +255,32 @@ public class GEAR_scraper_GUI implements ItemListener {
             // want to search for courses in the filteredGE list so that the checkboxes can narrow down the search before hand
             for (int i = filteredGEs.size() - 1; i >= 0; i--) {
                 String course = filteredGEs.get(i).toString();
-
-
                 if (course.equalsIgnoreCase(query) && !foundCourseList.contains(course)) {
                     // add the course to the addedCourseArr
-
                     addedCourseArr.add(course);
-                    foundCourseList.add(course);
+                    foundCourseList.add(course); //can remove later, redundant since the same data is being stored in addedCourseArr
 
                 }
             }
 
-            // the addedCourseArr now contains a new item, need to update the JList and update the frame
 
-            // want to add to the array and then add to the course list
-            // need to convert the ArrayList to an array to pass to the JList
+            // remove this line of code and instead update the exisiting defaultListModel
+            //justchanged
+            //DefaultListModel updatedModel = new DefaultListModel<String>();
 
-            // creates the new JLIst
-            addedCourseList = new JList<String>(addedCourseArr.toArray(new String[addedCourseArr.size()]));
+            for (String s : addedCourseArr) {
+                System.out.println(s);
 
-            // removes the old addedCoursePane from the frame, makes a new one and then adds it back
-            addedCoursePane.setVisible(false);
-            // removes the scrollapne from the jpanel
-            SearchWrapper.remove(addedCoursePane);
-            addedCoursePane = new JScrollPane(addedCourseList);
-            scrollPane.setPreferredSize(new Dimension(ALLGE_SCROLLPANE_WIDTH, WINDOW_HEIGHT));
-            SearchWrapper.add(addedCoursePane, 1); // want to add it back into the same place, index 1
+                // Need to replace this with a line of code that adds to th eexisting defaultListModel
 
-            frame.invalidate();
-            frame.validate();
+                // adds the new elements to the listModel
+                listModel.addElement(s);
+
+            }
+
+            // remakes the model, should show the updated data in the JScrollpane
+            // adds the listModel back to the addedCourseList
+            addedCourseList.setModel(listModel);
 
         }
 
@@ -287,22 +296,10 @@ private class clearCoursesButtoncheduleListener implements ActionListener {
             addedCourseArr.clear();
 
             // remakes the entire addedCoursesPane
-
-            // need to clear the addedCoursesList and then update the JList
-            addedCourseList = new JList<String>(addedCourseArr.toArray(new String[addedCourseArr.size()]));
-
-            // removes the old addedCoursePane from the frame, makes a new one and then adds it back
-            addedCoursePane.setVisible(false);
-            // removes the scrollapne from the jpanel
-            SearchWrapper.remove(addedCoursePane);
-            addedCoursePane = new JScrollPane(addedCourseList);
-            scrollPane.setPreferredSize(new Dimension(ALLGE_SCROLLPANE_WIDTH, WINDOW_HEIGHT));
-            SearchWrapper.add(addedCoursePane, 1); // want to add it back into the same place, index 1
-
-            frame.invalidate();
-            frame.validate();
+            // clears the exising listModel and then adds it back to the addedCOurselist
+            listModel.clear();
+            addedCourseList.setModel(listModel);
         }
-
     }
 
 
@@ -319,27 +316,30 @@ private class clearCoursesButtoncheduleListener implements ActionListener {
             int endPage;
             URL url;
             line = JOptionPane.showInputDialog("Enter the URL");
-            try {
-                url = new URL(line);
-            } catch (MalformedURLException ex) {
 
-                JOptionPane.showMessageDialog(null, "There was an error following the URL.");
-                return;
+            if (!line.equals("")) {
+                try {
+                    url = new URL(line);
+                } catch (MalformedURLException ex) {
+
+                    JOptionPane.showMessageDialog(null, "There was an error following the URL.");
+                    return;
+                }
+                start = JOptionPane.showInputDialog("Enter the page in GEAR the GE's start on");
+                end = JOptionPane.showInputDialog("Enter the page in GEAR the GE's end on");
+                try {
+                    startPage = Integer.parseInt(start);
+                    endPage = Integer.parseInt(end);
+                    if (endPage - startPage > 10)
+                        throw new NumberFormatException();
+                } catch (NumberFormatException ex) {
+                    JOptionPane.showMessageDialog(null, "Those weren't properly formatted numbers. Make sure to only put the page numbers the GE's are on.");
+                    return;
+                }
+                scraper = new GEAR_scraper(url, startPage, endPage);
+                allGEList = scraper.createArrayList();
+                show("all");
             }
-            start = JOptionPane.showInputDialog("Enter the page in GEAR the GE's start on");
-            end = JOptionPane.showInputDialog("Enter the page in GEAR the GE's end on");
-            try {
-                startPage = Integer.parseInt(start);
-                endPage = Integer.parseInt(end);
-                if (endPage - startPage > 10)
-                    throw new NumberFormatException();
-            } catch (NumberFormatException ex) {
-                JOptionPane.showMessageDialog(null, "Those weren't properly formatted numbers. Make sure to only put the page numbers the GE's are on.");
-                return;
-            }
-            scraper = new GEAR_scraper(url, startPage, endPage);
-            allGEList = scraper.createArrayList();
-            show("all");
 
         }
     }
