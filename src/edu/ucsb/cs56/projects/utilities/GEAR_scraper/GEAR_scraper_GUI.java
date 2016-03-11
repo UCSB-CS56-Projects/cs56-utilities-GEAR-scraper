@@ -63,12 +63,9 @@ public class GEAR_scraper_GUI implements ItemListener {
 
 
     private ArrayList<String> foundCourseList;   // used to add to the Found Courses List
-
-
-    private ArrayList<String> addedCourseArr;    // should only need this to save the searched classes
     private JList<String> addedCourseList;       // Jlist of the saved courses
     private DefaultListModel listModel;
-
+    private DefaultListModel startListModel;
 
     private void go() {
 
@@ -78,13 +75,13 @@ public class GEAR_scraper_GUI implements ItemListener {
         WINDOW_WIDTH = 600;
         WINDOW_HEIGHT = 500;
         ALLGE_SCROLLPANE_WIDTH = 250;
-        SEARCH_PANEL_WIDTH = 600;
+        SEARCH_PANEL_WIDTH = 650;
         CHECKBOX_PANEL_HEIGHT = 700;
 
         //initialize Listeners
         CustomURLButtonListener customURLBL = new CustomURLButtonListener();
         MySearchBarListener msbl = new MySearchBarListener();
-        clearCoursesButtoncheduleListener clearCoursesButtoncheduleBL = new clearCoursesButtoncheduleListener();
+        clearCoursesButtonScheduleListener clearCoursesButtonScheduleBL = new clearCoursesButtonScheduleListener();
 
         customURLButton = new JButton("Custom URL");
         scraper = new GEAR_scraper();                                 // uses the default url
@@ -126,10 +123,19 @@ public class GEAR_scraper_GUI implements ItemListener {
 
         // Found Course List to keep track of duplicate searches
         foundCourseList = new ArrayList<String>();
-        addedCourseArr = new ArrayList<String>();
-        addedCourseList = new JList<String>(addedCourseArr.toArray(new String[addedCourseArr.size()]));
+
+
+        addedCourseList = new JList<String>();
+        startListModel = new DefaultListModel<String>();
+        startListModel.addElement("Add Courses by Searching!");
+        addedCourseList.setModel(startListModel);
+
+
         // makes the DefaultListModel for the addedCOurseList
         listModel = new DefaultListModel<String>();
+
+
+
 
 
         // Clear Courses Button
@@ -177,7 +183,7 @@ public class GEAR_scraper_GUI implements ItemListener {
         // Adding Action Listeners
         customURLButton.addActionListener(customURLBL);                    // custom URL Button Listener
         searchBar.addActionListener(msbl);                                 // my search bar listener
-        clearCoursesButton.addActionListener(clearCoursesButtoncheduleBL); // clear Course Schedule Button Listener
+        clearCoursesButton.addActionListener(clearCoursesButtonScheduleBL); // clear Course Schedule Button Listener
 
 
         // Add course schedule, checkboxPanel, Custom URL
@@ -214,6 +220,7 @@ public class GEAR_scraper_GUI implements ItemListener {
 
 
 
+
     /* reacts to checkboxes being clicked
      */
 
@@ -230,57 +237,73 @@ public class GEAR_scraper_GUI implements ItemListener {
             }
             show(showString);
         }
-
-
     }
 
 
 
 
     /* reacts to searches
-
      */
 
-
-    // want to add the ability to prompt the user whether or not to add a course along with information about the course
     private class MySearchBarListener implements ActionListener {
 
         public void actionPerformed(ActionEvent e) {
             // want to search the array of courses for the entered course
             // only gets the course being searched, text after "Search for a Course: "
-            String query = searchBar.getText(); //.substring(21);
+            String query = searchBar.getText();
             // reset the text in the search bar
             searchBar.setText("");
 
-            // want to search for courses in the filteredGE list so that the checkboxes can narrow down the search before hand
-            for (int i = filteredGEs.size() - 1; i >= 0; i--) {
-                String course = filteredGEs.get(i).toString();
-                if (course.equalsIgnoreCase(query) && !foundCourseList.contains(course)) {
-                    // add the course to the addedCourseArr
-                    addedCourseArr.add(course);
-                    foundCourseList.add(course); //can remove later, redundant since the same data is being stored in addedCourseArr
+            if (query.equals("clear")) {
+                foundCourseList.clear();
+                listModel.clear();
+                addedCourseList.setModel(listModel);
+                return;
+            } else {
 
+                // want to search for courses in the filteredGE list so that the checkboxes can narrow down the search before hand
+                for (int i = filteredGEs.size() - 1; i >= 0; i--) {
+                    GECourse course = filteredGEs.get(i);
+                    String courseName = course.toString();
+                    // don't care about first letter caps, checks for adding the same course multiple times
+                    if (courseName.equalsIgnoreCase(query) && !foundCourseList.contains(courseName)) {
+                        // add the course to the foundCourseList
+                        foundCourseList.add(courseName);
+
+                        String Line = courseName + " satisfies: ";
+                        ArrayList<String> areas = new ArrayList<String>();
+                        if (course.isD()) areas.add("D");
+                        if (course.isE()) areas.add("E");
+                        if (course.isF()) areas.add("F");
+                        if (course.isG()) areas.add("G");
+                        if (course.isH()) areas.add("H");
+                        if (course.isS()) areas.add("S");
+                        if (course.isWriting()) areas.add("W");
+                        if (course.isAmHistInst()) areas.add("AmHistInst");
+                        if (course.isEthnicity()) areas.add("Ethnicity");
+                        if (course.isEuroTrad()) areas.add("Euro");
+
+
+                        if (areas.size() == 0) {
+                            //this means that a course doesnt satify any areas
+                            Line += "nada, don't take it!";
+                        } else {
+                            // fenceposting for commas
+                            for (int j = 0; j < areas.size() - 1; j++) {
+                                Line += areas.get(j) + ", ";
+                            }
+                            Line += areas.get(areas.size()-1);
+                        }
+
+
+                        listModel.addElement(Line);
+                    }
                 }
+
+                // remakes the model, should show the updated data in the JScrollpane
+                // adds the listModel back to the addedCourseList
+                addedCourseList.setModel(listModel);
             }
-
-
-            // remove this line of code and instead update the exisiting defaultListModel
-            //justchanged
-            //DefaultListModel updatedModel = new DefaultListModel<String>();
-
-            for (String s : addedCourseArr) {
-                System.out.println(s);
-
-                // Need to replace this with a line of code that adds to th eexisting defaultListModel
-
-                // adds the new elements to the listModel
-                listModel.addElement(s);
-
-            }
-
-            // remakes the model, should show the updated data in the JScrollpane
-            // adds the listModel back to the addedCourseList
-            addedCourseList.setModel(listModel);
 
         }
 
@@ -290,10 +313,9 @@ public class GEAR_scraper_GUI implements ItemListener {
     /* reacts to Clear Course Schedule Button being pressed
 
     */
-private class clearCoursesButtoncheduleListener implements ActionListener {
+private class clearCoursesButtonScheduleListener implements ActionListener {
         public void actionPerformed(ActionEvent e) {
             foundCourseList.clear();
-            addedCourseArr.clear();
 
             // remakes the entire addedCoursesPane
             // clears the exising listModel and then adds it back to the addedCOurselist
