@@ -38,7 +38,7 @@ public class GEAR_scraper_GUI implements ItemListener {
     private GECourse[] allGEArray;               // Created from the allGEList ArrayList
     private JList<GECourse> allGEArr;            // This is the scrollable page for all of the GE courses
 
-    
+
     private ArrayList<GECourse> filteredGEs;     // displayed when the checkboxes are clicked to narrow the search
     private GECourse[] filteredGEList;           // displayed    when the checkboxes are clicked to narrow the search
 
@@ -97,14 +97,12 @@ public class GEAR_scraper_GUI implements ItemListener {
         titleWrapper.add(title);                                      // title is added to the wrapper and the wrapper is added to the top of the GUI
 
 
-
         // Array of GE Classes
         allGEList = scraper.createArrayList();                        // allGEList is an ArrayList of GECourse objects
         allGEArray = new GECourse[allGEList.size()];
-		allGEArray = allGEList.toArray(allGEArray);                   // use allGEList to create an array, allGEArray
+        allGEArray = allGEList.toArray(allGEArray);                   // use allGEList to create an array, allGEArray
         filteredGEs = new ArrayList<GECourse>(allGEList);             // used in the show method and the searchBar Listener
         allGEArr = new JList<GECourse>(allGEArray);                   // A graphical list of GECouse objects
-
 
 
         // Search Bar
@@ -128,14 +126,13 @@ public class GEAR_scraper_GUI implements ItemListener {
         addedCourseList = new JList<String>();
         startListModel = new DefaultListModel<String>();
         startListModel.addElement("Add Courses by Searching!");
+        startListModel
+                .addElement("You can also Clear by typing 'clear' into the search box");
         addedCourseList.setModel(startListModel);
 
 
         // makes the DefaultListModel for the addedCOurseList
         listModel = new DefaultListModel<String>();
-
-
-
 
 
         // Clear Courses Button
@@ -152,12 +149,10 @@ public class GEAR_scraper_GUI implements ItemListener {
         //SearchWrapper.setBorder(BorderFactory.createLineBorder(Color.BLACK));
 
 
-
         // Builds the Found Courses Panel
         // empty JScrollPane for the courses that have been searched and added
         addedCoursePanel = new JScrollPane(addedCourseList);
         addedCoursePanel.setMaximumSize(new Dimension(SEARCH_PANEL_WIDTH, 400));
-
 
 
         frame = new JFrame("GEAR Scraper");
@@ -176,8 +171,6 @@ public class GEAR_scraper_GUI implements ItemListener {
             temp.addItemListener(this);
             checkBoxPanel.add(temp);
         }
-
-
 
 
         // Adding Action Listeners
@@ -257,7 +250,7 @@ public class GEAR_scraper_GUI implements ItemListener {
             if (query.equals("clear")) {
                 foundCourseList.clear();
                 listModel.clear();
-                addedCourseList.setModel(listModel);
+                addedCourseList.setModel(startListModel);
                 return;
             } else {
 
@@ -270,33 +263,9 @@ public class GEAR_scraper_GUI implements ItemListener {
                         // add the course to the foundCourseList
                         foundCourseList.add(courseName);
 
-                        String Line = courseName + " satisfies: ";
-                        ArrayList<String> areas = new ArrayList<String>();
-                        if (course.isD()) areas.add("D");
-                        if (course.isE()) areas.add("E");
-                        if (course.isF()) areas.add("F");
-                        if (course.isG()) areas.add("G");
-                        if (course.isH()) areas.add("H");
-                        if (course.isS()) areas.add("S");
-                        if (course.isWriting()) areas.add("W");
-                        if (course.isAmHistInst()) areas.add("AmHistInst");
-                        if (course.isEthnicity()) areas.add("Ethnicity");
-                        if (course.isEuroTrad()) areas.add("Euro");
+                        String courseAreasSatisfied = areasSatisfied(course, courseName);
 
-
-                        if (areas.size() == 0) {
-                            //this means that a course doesnt satify any areas
-                            Line += "nada, don't take it!";
-                        } else {
-                            // fenceposting for commas
-                            for (int j = 0; j < areas.size() - 1; j++) {
-                                Line += areas.get(j) + ", ";
-                            }
-                            Line += areas.get(areas.size()-1);
-                        }
-
-
-                        listModel.addElement(Line);
+                        listModel.addElement(courseAreasSatisfied);
                     }
                 }
 
@@ -313,17 +282,16 @@ public class GEAR_scraper_GUI implements ItemListener {
     /* reacts to Clear Course Schedule Button being pressed
 
     */
-private class clearCoursesButtonScheduleListener implements ActionListener {
+    private class clearCoursesButtonScheduleListener implements ActionListener {
         public void actionPerformed(ActionEvent e) {
             foundCourseList.clear();
 
             // remakes the entire addedCoursesPane
             // clears the exising listModel and then adds it back to the addedCOurselist
             listModel.clear();
-            addedCourseList.setModel(listModel);
+            addedCourseList.setModel(startListModel);
         }
     }
-
 
 
     /* reacts to Custom URL Button being pressed
@@ -365,8 +333,6 @@ private class clearCoursesButtonScheduleListener implements ActionListener {
 
         }
     }
-
-
 
 
     // stolen from my CLI interface
@@ -465,8 +431,34 @@ private class clearCoursesButtonScheduleListener implements ActionListener {
         frame.validate();
     }
 
+    private String areasSatisfied(GECourse course, String courseName) {
 
+        String Line = courseName + " satisfies: ";
+        ArrayList<String> areas = new ArrayList<String>();
+        if (course.isD()) areas.add("D");
+        if (course.isE()) areas.add("E");
+        if (course.isF()) areas.add("F");
+        if (course.isG()) areas.add("G");
+        if (course.isH()) areas.add("H");
+        if (course.isS()) areas.add("S");
+        if (course.isWriting()) areas.add("W");
+        if (course.isAmHistInst()) areas.add("AmHistInst");
+        if (course.isEthnicity()) areas.add("Ethnicity");
+        if (course.isEuroTrad()) areas.add("Euro");
 
+        if (areas.size() == 0) {
+            //this means that a course doesnt satify any areas
+            Line += "nada, don't take it!";
+        } else {
+            // fenceposting for commas
+            for (int j = 0; j < areas.size() - 1; j++) {
+                Line += areas.get(j) + ", ";
+            }
+            Line += areas.get(areas.size() - 1);
+        }
+
+        return Line;
+    }
 
     public static void main(String... args) {
         GEAR_scraper_GUI gui = new GEAR_scraper_GUI();
