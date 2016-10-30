@@ -3,6 +3,8 @@ cs-utilities-GEAR-scraper
 
 Scrape the UCSB Gear Catalog to form lists of structured information (e.g. course numbers that meet certain GE requirements.)
 
+https://engineering.ucsb.edu/sites/engineering.ucsb.edu/files/docs/GEAR-16-17.pdf
+
 project history
 ===============
 ```
